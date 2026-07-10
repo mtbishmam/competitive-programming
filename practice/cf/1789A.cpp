@@ -75,6 +75,14 @@ const int N = 1e5 + 1;
 // using namespace __gnu_pbds;
 // template<class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
+void solve(int cs) {
+    int n; cin >> n;
+    vi a(n); for (auto& i : a) cin >> i;
+    bool f = 0;
+    rep(i, 0, n) rep(j, i+1, n) f |= gcd(a[i], a[j]) <= 2;
+    cout << (f ? "Yes" : "No") << endl;
+}
+
 int32_t main()
 {
 #ifndef ONLINE_JUDGE
@@ -88,6 +96,9 @@ int32_t main()
 
     int T(1);
     cin >> T;
+    for (int i = 0; i < T; i++) solve(i);
+    return 0;
+
     for (int Ti = 1; Ti <= T; Ti++) {
         int n; cin >> n;
         vi a(n); cin >> a;
