@@ -1,0 +1,20 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     1855B
+relocations:
+  - { offset: 0x2B601, size: 0x8, addend: 0x0, symName: __ZStL8__ioinit, symObjAddr: 0xC0831, symBinAddr: 0x100008000, symSize: 0x0 }
+  - { offset: 0x2BDE8, size: 0x8, addend: 0x0, symName: _rng, symObjAddr: 0xC0838, symBinAddr: 0x100008008, symSize: 0x0 }
+  - { offset: 0x2C2D9, size: 0x8, addend: 0x0, symName: __GLOBAL__sub_I_1855B.cpp, symObjAddr: 0x374, symBinAddr: 0x100000A5C, symSize: 0x14 }
+  - { offset: 0x2C2F1, size: 0x8, addend: 0x0, symName: __Z41__static_initialization_and_destruction_0v, symObjAddr: 0x30C, symBinAddr: 0x1000009F4, symSize: 0x68 }
+  - { offset: 0x2C309, size: 0x8, addend: 0x0, symName: __ZNSt8__detail4_ModIyLy312ELy1ELy0ELb1ELb1EE6__calcEy, symObjAddr: 0x2A8, symBinAddr: 0x100000998, symSize: 0x5C }
+  - { offset: 0x2C342, size: 0x8, addend: 0x0, symName: __ZNSt8__detail4_ModIyLy0ELy1ELy0ELb1ELb0EE6__calcEy, symObjAddr: 0x28C, symBinAddr: 0x10000097C, symSize: 0x1C }
+  - { offset: 0x2C37B, size: 0x8, addend: 0x0, symName: __ZNSt8__detail5__modIyLy312ELy1ELy0EEET_S1_, symObjAddr: 0x270, symBinAddr: 0x100000960, symSize: 0x1C }
+  - { offset: 0x2C3CC, size: 0x8, addend: 0x0, symName: __ZNSt8__detail5__modIyLy0ELy1ELy0EEET_S1_, symObjAddr: 0x254, symBinAddr: 0x100000944, symSize: 0x1C }
+  - { offset: 0x2C420, size: 0x8, addend: 0x0, symName: __ZNSt23mersenne_twister_engineIyLm64ELm312ELm156ELm31ELy13043109905998158313ELm29ELy6148914691236517205ELm17ELy8202884508482404352ELm37ELy18444473444759240704ELm43ELy6364136223846793005EE4seedEy, symObjAddr: 0x180, symBinAddr: 0x100000870, symSize: 0xD4 }
+  - { offset: 0x2C4CB, size: 0x8, addend: 0x0, symName: __ZNSt23mersenne_twister_engineIyLm64ELm312ELm156ELm31ELy13043109905998158313ELm29ELy6148914691236517205ELm17ELy8202884508482404352ELm37ELy18444473444759240704ELm43ELy6364136223846793005EEC1Ey, symObjAddr: 0x158, symBinAddr: 0x100000848, symSize: 0x28 }
+  - { offset: 0x2C4FA, size: 0x8, addend: 0x0, symName: __ZNKSt6chrono10time_pointINS_3_V212steady_clockENS_8durationIxSt5ratioILl1ELl1000000000EEEEE16time_since_epochEv, symObjAddr: 0x140, symBinAddr: 0x100000830, symSize: 0x18 }
+  - { offset: 0x2C527, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0xC4, symBinAddr: 0x1000007B4, symSize: 0x7C }
+  - { offset: 0x2C57A, size: 0x8, addend: 0x0, symName: __Z5solvex, symObjAddr: 0x40, symBinAddr: 0x100000730, symSize: 0x84 }
+  - { offset: 0x2C5CA, size: 0x8, addend: 0x0, symName: __Z2p2v, symObjAddr: 0x18, symBinAddr: 0x100000708, symSize: 0x28 }
+  - { offset: 0x2C5E6, size: 0x8, addend: 0x0, symName: __ZNKSt6chrono8durationIxSt5ratioILl1ELl1000000000EEE5countEv, symObjAddr: 0x0, symBinAddr: 0x1000006F0, symSize: 0x18 }
+...
