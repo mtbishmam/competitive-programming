@@ -1,0 +1,10 @@
+.DS_Store
+*.bin
+*.dSYM/
+*.swp
+*~
+tempCodeRunnerFile.cpp
+**/.vscode/c_cpp_properties.json
+/practice/in
+/practice/out
+/practice/exp

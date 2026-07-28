@@ -1,4 +1,0 @@
-#!/bin/zsh
-cd /Users/mtbishmam/Code/Competitive-Programming/practice/cf || exit 1
-cp -n template.cpp "$1"
-vim "$1"

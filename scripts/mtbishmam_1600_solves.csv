@@ -1,0 +1,107 @@
+Contest ID,Index,Name,Rating,Tags,Date Solved,URL
+1,B,Spreadsheet,1600,"implementation, math",2022-09-12,https://codeforces.com/problemset/problem/1/B
+11,B,Jumping Jack,1600,math,2025-08-19,https://codeforces.com/problemset/problem/11/B
+75,C,Modified GCD,1600,"binary search, number theory",2022-03-31,https://codeforces.com/problemset/problem/75/C
+178,C1,Smart Beaver and Resolving Collisions,1600,,2022-09-30,https://codeforces.com/problemset/problem/178/C1
+207,A1,Beaver's Calculator 1.0,1600,greedy,2022-09-30,https://codeforces.com/problemset/problem/207/A1
+207,B1,Military Trainings,1600,,2022-09-30,https://codeforces.com/problemset/problem/207/B1
+207,D5,The Beaver's Problem - 3,1600,,2022-09-29,https://codeforces.com/problemset/problem/207/D5
+207,D7,The Beaver's Problem - 3,1600,,2022-09-29,https://codeforces.com/problemset/problem/207/D7
+235,A,LCM Challenge,1600,number theory,2022-03-02,https://codeforces.com/problemset/problem/235/A
+237,C,Primes on Interval,1600,"binary search, number theory, two pointers",2025-09-25,https://codeforces.com/problemset/problem/237/C
+246,D,Colorful Graph,1600,"brute force, dfs and similar, graphs",2022-04-05,https://codeforces.com/problemset/problem/246/D
+316,B2,EKG,1600,"dfs and similar, dp",2022-09-23,https://codeforces.com/problemset/problem/316/B2
+322,B,Ciel and Flowers,1600,"combinatorics, math",2022-03-20,https://codeforces.com/problemset/problem/322/B
+343,B,Alternating Current,1600,"data structures, greedy, implementation",2022-03-29,https://codeforces.com/problemset/problem/343/B
+349,C,Mafia,1600,implementation,2025-09-17,https://codeforces.com/problemset/problem/349/C
+369,C,Valera and Elections,1600,"dfs and similar, graphs, trees",2022-04-06,https://codeforces.com/problemset/problem/369/C
+371,C,Hamburgers,1600,"binary search, brute force",2022-03-01,https://codeforces.com/problemset/problem/371/C
+372,A,Counting Kangaroos is Fun,1600,"binary search, greedy, sortings, two pointers",2025-09-15,https://codeforces.com/problemset/problem/372/A
+377,A,Maze,1600,dfs and similar,2025-09-06,https://codeforces.com/problemset/problem/377/A
+431,C,k-Tree,1600,"dp, implementation, trees",2022-02-28,https://codeforces.com/problemset/problem/431/C
+446,A,DZY Loves Sequences,1600,"dp, implementation, two pointers",2022-03-08,https://codeforces.com/problemset/problem/446/A
+560,C,Gerald's Hexagon,1600,geometry,2025-10-04,https://codeforces.com/problemset/problem/560/C
+601,A,The Two Routes,1600,"graphs, shortest paths",2025-09-19,https://codeforces.com/problemset/problem/601/A
+607,A,Chain Reaction,1600,"binary search, dp",2022-04-03,https://codeforces.com/problemset/problem/607/A
+706,C,Hard problem,1600,"dp, strings",2022-10-11,https://codeforces.com/problemset/problem/706/C
+727,B,Bill Total Value,1600,"expression parsing, implementation, strings",2022-09-14,https://codeforces.com/problemset/problem/727/B
+735,D,Taxes,1600,"math, number theory",2022-03-14,https://codeforces.com/problemset/problem/735/D
+780,C,Andryusha and Colored Balloons,1600,"dfs and similar, graphs, greedy, trees",2022-04-06,https://codeforces.com/problemset/problem/780/C
+788,A,Functions again,1600,"dp, two pointers",2022-04-01,https://codeforces.com/problemset/problem/788/A
+980,B,Marlin,1600,constructive algorithms,2025-11-24,https://codeforces.com/problemset/problem/980/B
+1003,D,Coins and Queries,1600,greedy,2022-08-18,https://codeforces.com/problemset/problem/1003/D
+1006,E,Military Problem,1600,"dfs and similar, graphs, trees",2022-08-17,https://codeforces.com/problemset/problem/1006/E
+1015,D,Walking Between Houses,1600,"constructive algorithms, greedy",2022-08-19,https://codeforces.com/problemset/problem/1015/D
+1029,C,Maximal Intersection,1600,"greedy, math, sortings",2022-08-24,https://codeforces.com/problemset/problem/1029/C
+1041,C,Coffee Break,1600,"binary search, data structures, greedy, two pointers",2022-04-03,https://codeforces.com/problemset/problem/1041/C
+1077,D,Cutting Out,1600,"binary search, sortings",2022-08-26,https://codeforces.com/problemset/problem/1077/D
+1095,D,Circular Dance,1600,implementation,2022-08-28,https://codeforces.com/problemset/problem/1095/D
+1133,F1,Spanning Tree with Maximum Degree,1600,graphs,2022-10-11,https://codeforces.com/problemset/problem/1133/F1
+1165,D,Almost All Divisors,1600,"math, number theory",2025-09-10,https://codeforces.com/problemset/problem/1165/D
+1196,D2,RGB Substring (hard version),1600,"data structures, dp, implementation, two pointers",2022-04-04,https://codeforces.com/problemset/problem/1196/D2
+1198,B,Welfare State,1600,"binary search, brute force, data structures, sortings",2022-04-01,https://codeforces.com/problemset/problem/1198/B
+1213,D2,Equalizing by Division (hard version),1600,"brute force, math, sortings",2022-03-24,https://codeforces.com/problemset/problem/1213/D2
+1234,D,Distinct Characters Queries,1600,data structures,2025-09-10,https://codeforces.com/problemset/problem/1234/D
+1243,B2,Character Swap (Hard Version),1600,strings,2021-10-17,https://codeforces.com/problemset/problem/1243/B2
+1251,C,Minimize The Integer,1600,"greedy, two pointers",2022-03-22,https://codeforces.com/problemset/problem/1251/C
+1288,C,Two Arrays,1600,"combinatorics, dp",2025-09-16,https://codeforces.com/problemset/problem/1288/C
+1305,C,Kuroni and Impossible Calculation,1600,"brute force, combinatorics, math, number theory",2025-09-11,https://codeforces.com/problemset/problem/1305/C
+1321,C,Remove Adjacent,1600,"brute force, constructive algorithms, greedy, strings",2022-04-01,https://codeforces.com/problemset/problem/1321/C
+1327,C,Game with Chips,1600,"constructive algorithms, implementation",2022-03-06,https://codeforces.com/problemset/problem/1327/C
+1334,C,Circle of Monsters,1600,"brute force, constructive algorithms, greedy, math",2025-09-06,https://codeforces.com/problemset/problem/1334/C
+1336,A,Linova and Kingdom,1600,"dfs and similar, dp, greedy, sortings, trees",2025-09-10,https://codeforces.com/problemset/problem/1336/A
+1337,C,Linova and Kingdom,1600,"dfs and similar, dp, greedy, sortings, trees",2026-06-01,https://codeforces.com/problemset/problem/1337/C
+1342,C,Yet Another Counting Problem,1600,"math, number theory",2025-09-15,https://codeforces.com/problemset/problem/1342/C
+1345,C,Hilbert's Hotel,1600,"math, sortings",2025-09-13,https://codeforces.com/problemset/problem/1345/C
+1348,C,Phoenix and Distribution,1600,"constructive algorithms, greedy, sortings, strings",2021-12-17,https://codeforces.com/problemset/problem/1348/C
+1349,A,Orac and LCM,1600,"data structures, math, number theory",2025-09-06,https://codeforces.com/problemset/problem/1349/A
+1352,G,Special Permutation,1600,constructive algorithms,2022-03-01,https://codeforces.com/problemset/problem/1352/G
+1353,D,Constructing the Array,1600,"constructive algorithms, data structures, sortings",2022-03-01,https://codeforces.com/problemset/problem/1353/D
+1358,C,Celex Update,1600,math,2022-03-01,https://codeforces.com/problemset/problem/1358/C
+1363,C,Game On Leaves,1600,"games, trees",2022-03-01,https://codeforces.com/problemset/problem/1363/C
+1364,C,Ehab and Prefix MEXs,1600,"brute force, constructive algorithms, greedy",2025-09-17,https://codeforces.com/problemset/problem/1364/C
+1373,D,Maximum Sum on Even Positions,1600,"divide and conquer, dp, greedy, implementation",2025-09-12,https://codeforces.com/problemset/problem/1373/D
+1374,E1,Reading Books (easy version),1600,"data structures, greedy, sortings",2022-10-12,https://codeforces.com/problemset/problem/1374/E1
+1395,C,Boboniu and Bit Operations,1600,"bitmasks, brute force, dp, greedy",2022-10-03,https://codeforces.com/problemset/problem/1395/C
+1397,C,Multiples of Length,1600,"constructive algorithms, greedy, math, number theory",2025-09-12,https://codeforces.com/problemset/problem/1397/C
+1398,C,Good Subarrays,1600,"data structures, dp, math",2022-09-16,https://codeforces.com/problemset/problem/1398/C
+1407,C,Chocolate Bunny,1600,"constructive algorithms, interactive, math, two pointers",2025-09-18,https://codeforces.com/problemset/problem/1407/C
+1437,D,Minimal Height Tree,1600,"graphs, greedy, shortest paths, trees",2022-03-20,https://codeforces.com/problemset/problem/1437/D
+1455,D,Sequence and Swaps,1600,"dp, greedy, sortings",2022-03-17,https://codeforces.com/problemset/problem/1455/D
+1458,A,Row GCD,1600,"math, number theory",2022-03-07,https://codeforces.com/problemset/problem/1458/A
+1475,E,Advertising Agency,1600,"combinatorics, math, sortings",2022-03-16,https://codeforces.com/problemset/problem/1475/E
+1481,C,Fence Painting,1600,"brute force, constructive algorithms, greedy",2022-03-24,https://codeforces.com/problemset/problem/1481/C
+1482,C,Basic Diplomacy,1600,"brute force, constructive algorithms, greedy, implementation",2022-04-05,https://codeforces.com/problemset/problem/1482/C
+1504,C,Balance the Bits,1600,"brute force, constructive algorithms, greedy",2022-09-28,https://codeforces.com/problemset/problem/1504/C
+1512,E,Permutation by Sum,1600,"brute force, greedy, math",2022-04-04,https://codeforces.com/problemset/problem/1512/E
+1513,C,Add One,1600,"dp, matrices",2025-09-14,https://codeforces.com/problemset/problem/1513/C
+1514,C,Product 1 Modulo N,1600,"greedy, number theory",2025-09-14,https://codeforces.com/problemset/problem/1514/C
+1519,D,Maximum Sum of Products,1600,"brute force, dp, implementation, math, two pointers",2025-09-12,https://codeforces.com/problemset/problem/1519/D
+1520,F1,Guess the K-th Zero (Easy version),1600,"binary search, interactive",2022-04-02,https://codeforces.com/problemset/problem/1520/F1
+1526,C2,Potions (Hard Version),1600,"data structures, greedy",2022-03-02,https://codeforces.com/problemset/problem/1526/C2
+1527,C,Sequence Pair Weight,1600,"hashing, implementation, math",2025-09-21,https://codeforces.com/problemset/problem/1527/C
+1528,A,Parsa's Humongous Tree,1600,"dfs and similar, divide and conquer, dp, greedy, trees",2022-06-03,https://codeforces.com/problemset/problem/1528/A
+1530,D,Secret Santa,1600,"constructive algorithms, flows, graphs, greedy, math",2021-08-08,https://codeforces.com/problemset/problem/1530/D
+1537,E1,Erase and Extend (Easy Version),1600,"binary search, brute force, dp, greedy, hashing, implementation, string suffix structures, strings, two pointers",2022-03-22,https://codeforces.com/problemset/problem/1537/E1
+1542,C,Strange Function,1600,"math, number theory",2025-09-21,https://codeforces.com/problemset/problem/1542/C
+1555,D,Say No to Palindromes,1600,"brute force, constructive algorithms, dp, strings",2022-03-28,https://codeforces.com/problemset/problem/1555/D
+1593,E,Gardener and Tree,1600,"brute force, data structures, dfs and similar, greedy, implementation, trees",2025-09-17,https://codeforces.com/problemset/problem/1593/E
+1603,B,Moderate Modular Mode,1600,"constructive algorithms, math, number theory",2022-03-22,https://codeforces.com/problemset/problem/1603/B
+1610,C,Keshi Is Throwing a Party,1600,"binary search, greedy",2025-09-21,https://codeforces.com/problemset/problem/1610/C
+1622,C,Set or Decrease,1600,"binary search, brute force, greedy, sortings",2025-09-15,https://codeforces.com/problemset/problem/1622/C
+1623,C,Balanced Stone Heaps,1600,"binary search, greedy",2022-04-04,https://codeforces.com/problemset/problem/1623/C
+1633,D,Make Them Equal,1600,"dp, greedy",2025-09-11,https://codeforces.com/problemset/problem/1633/D
+1660,D,Maximum Product Strikes Back,1600,"brute force, implementation, math, two pointers",2022-07-16,https://codeforces.com/problemset/problem/1660/D
+1671,D,Insert a Progression,1600,"brute force, constructive algorithms, greedy",2025-11-24,https://codeforces.com/problemset/problem/1671/D
+1702,E,Split Into Two Sets,1600,"dfs and similar, dsu, graphs",2025-09-13,https://codeforces.com/problemset/problem/1702/E
+1703,G,"Good Key, Bad Key",1600,"bitmasks, brute force, dp, greedy, math",2026-06-01,https://codeforces.com/problemset/problem/1703/G
+1708,C,Doremy's IQ,1600,"binary search, greedy",2025-09-16,https://codeforces.com/problemset/problem/1708/C
+1714,D,Color with Occurrences,1600,"brute force, data structures, dp, greedy, strings",2022-08-03,https://codeforces.com/problemset/problem/1714/D
+1754,D,Factorial Divisibility,1600,math,2025-09-16,https://codeforces.com/problemset/problem/1754/D
+1833,E,Round Dance,1600,"dfs and similar, dsu, graphs, shortest paths",2025-09-14,https://codeforces.com/problemset/problem/1833/E
+1856,C,To Become Max,1600,"binary search, brute force, data structures, dp",2025-09-13,https://codeforces.com/problemset/problem/1856/C
+1857,F,Sum and Product,1600,"binary search, data structures, math",2025-09-18,https://codeforces.com/problemset/problem/1857/F
+1907,E,Good Triples,1600,"brute force, combinatorics, number theory",2025-09-18,https://codeforces.com/problemset/problem/1907/E
+1920,C,Partitioning the Array,1600,"brute force, math, number theory",2025-09-10,https://codeforces.com/problemset/problem/1920/C
+2094,F,Trulimero Trulicina,1600,constructive algorithms,2026-06-05,https://codeforces.com/problemset/problem/2094/F
+2228,C2,Cirno and Number (Hard Version),1600,"binary search, dfs and similar, dp, greedy, implementation",2026-06-19,https://codeforces.com/problemset/problem/2228/C2
