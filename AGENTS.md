@@ -46,8 +46,24 @@ Solutions are independent C++ programs. Compile from the repository root:
 
 ```sh
 g++ practice/1914C.cpp -std=gnu++20 -g -Wall -Wshadow -o /tmp/1914C
-/tmp/1914C < input.txt
+/tmp/1914C < in
+rm -f -- /tmp/1914C
 ```
+
+`/tmp/1914C` is the operating system's temporary output path, not a `tmp/`
+directory in this repository. Prefer compiling there so generated executables
+never enter the worktree. If a runner instead creates artifacts beside the
+solution, remove only the artifacts associated with the current problem before
+committing. For example:
+
+```sh
+rm -f -- practice/1914C practice/1914C.bin practice/tempCodeRunnerFile.cpp
+rm -rf -- practice/1914C.dSYM practice/1914C.bin.dSYM
+```
+
+Also remove other confirmed generated artifacts for the current problem, such
+as stale swap or editor-backup files, but never use a broad recursive cleanup
+or delete `in`, `exp`, generators, scripts, or user-authored source files.
 
 When `scripts/` is on `PATH`, `cf 1914C` compiles and runs `1914C.cpp` in the current directory. Contest problem folders may provide:
 
@@ -195,5 +211,26 @@ excluding optional metadata refresh.
 ## Commit & Pull Request Guidelines
 
 Recent commits use short, imperative summaries such as `Solved 1855B.cpp`, `Add code for 1914A.cpp`, and `Edit template.cpp`. Keep each commit focused on one problem or one coherent template change.
+
+For every completed problem and successfully saved reflection, safely
+synchronize both `/Users/mtbishmam/code/competitive-programming` and
+`/Users/mtbishmam/code/cp-app`:
+
+1. Before beginning work, inspect `git status --short --branch` in each
+   repository. Run `git pull --ff-only` only when it cannot overwrite or mix
+   with uncommitted work. Never auto-stash, reset, force, or resolve a conflict
+   by guessing; stop and report the obstruction.
+2. After testing and saving the reflection, delete the current problem's
+   generated executable, `.bin`, `.dSYM`, temporary runner, and other confirmed
+   redundant artifacts using explicit paths. Inspect status again.
+3. In `competitive-programming`, stage only the completed problem and its
+   intentional related files, inspect the staged diff, commit with a focused
+   message such as `Solved 2179D.cpp`, and push the current branch without
+   force.
+4. In `cp-app`, use the same pull/commit/push sequence only when tracked app
+   code or documentation changed. A reflection stored in the remote database
+   does not change the Git repository and requires no empty commit.
+5. Never commit credentials, environment files, database files, generated
+   binaries, or unrelated pre-existing worktree changes.
 
 Pull requests should list affected problem IDs, summarize the algorithm or template change, and include the exact compile/test commands run. Mention known assumptions, complexity, and any missing stress coverage.
