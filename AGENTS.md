@@ -5,7 +5,7 @@
 This repository is the Codex-facing user interface for the personal CP learning
 system. The source code remains the user's normal competitive-programming
 workspace; when explicitly requested, Codex also interviews the user about a
-solved problem and saves the reflection through the `cp-app` MCP server.
+solved problem and saves the reflection through the ReSolve MCP server.
 
 Optimize for learning and extremely low friction. A normal capture should
 require only a problem URL and natural answers, and should finish in roughly
@@ -17,7 +17,7 @@ Keep responsibilities separated:
 - This repository and Codex own the conversation, local solution context, and
   presentation of the final reflection.
 - Deterministic platform adapters own URL parsing and metadata extraction.
-- The `cp-app` MCP server owns validation, identity, persistence, idempotency,
+- The ReSolve MCP server owns validation, identity, persistence, idempotency,
   and review scheduling.
 - Never write directly to a database from this repository, expose database
   credentials, or claim that a reflection was saved without a successful MCP
@@ -119,7 +119,9 @@ the problem is still unsolved, coach with incremental hints and wait until the
 user says it is solved before offering persistence.
 
 1. Obtain the canonical problem URL. Locate a likely solution from the naming
-   rules, but ask before choosing when multiple files are plausible.
+   rules, but ask before choosing when multiple files are plausible. If no
+   solution exists, ask the user to explain their approach and continue; source
+   code is useful context, not a requirement.
 2. Read the user's solution when available. Obtain a copied statement only when
    the platform adapter cannot fetch normalized problem content.
 3. Fetch metadata programmatically before spending model tokens on extraction,
@@ -214,7 +216,7 @@ Recent commits use short, imperative summaries such as `Solved 1855B.cpp`, `Add 
 
 For every completed problem and successfully saved reflection, safely
 synchronize both `/Users/mtbishmam/code/competitive-programming` and
-`/Users/mtbishmam/code/cp-app`:
+`/Users/mtbishmam/code/resolve`:
 
 1. Before beginning work, inspect `git status --short --branch` in each
    repository. Run `git pull --ff-only` only when it cannot overwrite or mix
@@ -227,7 +229,7 @@ synchronize both `/Users/mtbishmam/code/competitive-programming` and
    intentional related files, inspect the staged diff, commit with a focused
    message such as `Solved 2179D.cpp`, and push the current branch without
    force.
-4. In `cp-app`, use the same pull/commit/push sequence only when tracked app
+4. In ReSolve, use the same pull/commit/push sequence only when tracked app
    code or documentation changed. A reflection stored in the remote database
    does not change the Git repository and requires no empty commit.
 5. Never commit credentials, environment files, database files, generated
