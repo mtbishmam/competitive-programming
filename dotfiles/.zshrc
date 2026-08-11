@@ -1,11 +1,6 @@
-export PATH="$PATH:$HOME/cp"
-export PATH="/Library/TeX/texbin:$PATH"
-export PATH="$PATH:$HOME/bin"
-export PATH="$PATH:$HOME/code/competitive-programming/scripts"
-export PATH="$PATH:$HOME/Code/Competitive-Programming/scripts"
+export PATH="$HOME/cp:$HOME/code/competitive-programming/scripts:$PATH"
 
 eval "$(zoxide init zsh)"
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 new() {
