@@ -68,7 +68,7 @@ format has a visible interpretation selected.
 
 ## Contest registry
 
-Use `ssc-contest-links-aug-11.md` as the local source of truth for SSC title,
+Use `ssc-contest-links.md` as the local source of truth for SSC title,
 VJudge URL, contest ID, and password. Resolve a user-provided SSC name or URL
 against that file before doing anything else.
 
@@ -196,7 +196,6 @@ CodeForces | 2246D | 1 |
 CodeForces | 2224C | 1 |
 CodeForces | 2167F | 1 |
 AtCoder | abc405_a | 1 |
-Gym | 320558L | 1 |
 ```
 
 The fourth field is reserved for an optional VJudge alias and is empty unless
@@ -204,8 +203,8 @@ the user explicitly supplies one. Preserve the problem order and weight; do
 not sort by platform, difficulty, title, or problem key.
 
 The accepted labels are case-insensitive input aliases for `AtCoder`,
-`CodeChef`, `CodeForces`, `Gym`, and `CSES`; write the canonical labels shown
-above.
+`CodeChef`, `CodeForces`, `Gym`, `HDU`, `UVA`, `DMOJ`, and `CSES`; write the
+canonical labels shown above.
 The problem identifier is the exact VJudge/contest identifier supplied by the
 user. Do not replace it with a filename, title, frontend number, or a guessed
 slug.
@@ -454,6 +453,9 @@ Current adapter notes:
 | CodeChef | `CodeChef` | Use the supplied problem code; normalize to uppercase when the key is a CodeChef code. | `NEWBIE07` |
 | CodeForces | `CodeForces` | Use contest ID plus canonical uppercase index. | `384A` or `2246C` |
 | Gym | `Gym` | Use the VJudge Gym problem identifier, preserving the contest ID and problem index. | `320558L` |
+| HDU | `HDU` | Preserve the VJudge HDU problem identifier, normally the numeric problem key. | `4335` |
+| UVA | `UVA` | Preserve the VJudge UVA problem identifier, normally the numeric problem key. | `713` |
+| DMOJ | `DMOJ` | Preserve the VJudge DMOJ problem code exactly, including its contest prefix when present. | `ccc96s5` |
 | CSES | `CSES` | Use the stable numeric task key. | `2129` |
 
 Unknown OJs must be reported as unsupported. Never silently map them to a
