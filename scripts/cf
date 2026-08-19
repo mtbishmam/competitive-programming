@@ -1,3 +1,3 @@
 #!/bin/bash
 code=$1
-g++ ${code}.cpp -o $code -std=gnu++20 -g -DDeBuG -Wall -Wshadow && ./$code
+g++-16 ${code}.cpp -o $code -std=gnu++20 -g -DDeBuG -Wall -Wshadow && ./$code
