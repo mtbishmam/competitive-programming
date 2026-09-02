@@ -25,7 +25,31 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve(int cs) {
     int n; cin >> n;
-    cout << (n - 1) * 2 << endl;
+    vi indeg(n + 1), g[n + 1];
+    for (int i = 0; i < n - 1; i++) {
+        int u, v, x, y; cin >> u >> v >> x >> y;
+        if (x > y) { // 1 -> 2
+            g[u].push_back(v);
+            indeg[v]++;
+        } else {
+            g[v].push_back(u);
+            indeg[u]++;
+        }
+    }
+    queue<int> q; int c = n;
+    for (int i = 1; i <= n; i++) if (indeg[i] == 0) q.push(i);
+    vi ans(n + 1);
+    while (sz(q)) {
+        int u = q.front();
+        q.pop();
+
+        ans[u] = c--;
+        for (auto& v : g[u]) {
+            indeg[v]--;
+            if (indeg[v] == 0) q.push(v);
+        }
+    }
+    for (int i = 1; i <= n; i++) cout << ans[i] << " "; cout << endl;
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);

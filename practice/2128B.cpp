@@ -25,7 +25,26 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve(int cs) {
     int n; cin >> n;
-    cout << (n - 1) * 2 << endl;
+    vi a(n); for (auto& i : a) cin >> i;
+
+    int p = a[0]; string ans = "L";
+    for (int l = 1, r = n - 1; l <= r; l++, r--) {
+        if (l == r) {
+            ans += 'L';
+            continue;
+        }
+        int ll = a[l], rr = a[r], sw = 0;
+        if (ll > rr) swap(ll, rr), sw = 1;
+        if (ll < p && p < rr) ans += "LR", p = a[r];
+        else if (p < ll) {
+            if (sw == 0) ans += "RL", p = ll;
+            else ans += "LR", p = rr;
+        } else {
+            if (sw == 0) ans += "LR", p = rr;
+            else ans += "RL", p = ll;
+        }
+    }
+    cout << ans << endl;
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);

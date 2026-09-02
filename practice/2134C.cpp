@@ -25,7 +25,27 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve(int cs) {
     int n; cin >> n;
-    cout << (n - 1) * 2 << endl;
+    vi a(n); for (auto& i : a) cin >> i;
+
+    int ans = 0; vi b = a;
+    for (int i = 1; i < n; i += 2) {
+        if (i + 1 < n) {
+            int cur = max((int)0, a[i - 1] + a[i + 1] - a[i]);
+            a[i] += cur;
+            ans += cur;
+        }
+        if (a[i] < a[i - 1]) {
+            int x = a[i - 1] - a[i];
+            a[i] += x;
+            ans += x;
+        }
+        if (i + 1 < n && a[i] < a[i + 1]) {
+            int x = a[i + 1] - a[i];
+            a[i] += x;
+            ans += x;
+        }
+    }
+    cout << ans << endl;
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);

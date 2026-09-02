@@ -24,14 +24,27 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define rand(l, r) uniform_int_distribution<ll>(l, r)(rng)
 
 void solve(int cs) {
-    int n; cin >> n;
-    cout << (n - 1) * 2 << endl;
+    int n = 3;
+    int m = 6;
+    vvi a(n, vi(m));
+    rep(i,0,n) rep(j,0,m) cin >> a[i][j];
+
+    double ans = 0; vi b = {4, 5, 6};
+    do {
+        double p = 1;
+        rep(i,0,n) {
+            double can = count(all(a[i]), b[i]);
+            p *= can / 6;
+        }
+        ans += p;
+    } while(next_permutation(all(b)));
+    cout << fixed << setprecision(10) << ans << endl;
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);
     int tc = 1;
-    // #ifdef DeBuG
+    #ifdef DeBuG
     cin >> tc;
-    // #endif
+    #endif
     for (int cs = 1; cs <= tc; cs++) solve(cs);
 }

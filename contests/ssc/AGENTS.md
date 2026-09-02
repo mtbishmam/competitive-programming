@@ -3,6 +3,11 @@
 These instructions apply to every SSC replay run under
 `/Users/mtbishmam/code/competitive-programming/contests/ssc`.
 
+For SSC selection rules, seeded contestants, the balanced ranking algorithm,
+semester standings, and projected team assignment, read `ssc-analysis.md` in
+this directory. That file is the local source of truth for selection analysis;
+this file remains the source of truth for Replay creation.
+
 The current authoritative VJudge instructions are
 `https://vjudge.net/article/17624`. Treat that article as the source of truth
 if VJudge changes its Replay workflow. Article 87 is historical guidance only.

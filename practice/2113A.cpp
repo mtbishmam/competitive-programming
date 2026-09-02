@@ -24,8 +24,13 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define rand(l, r) uniform_int_distribution<ll>(l, r)(rng)
 
 void solve(int cs) {
-    int n; cin >> n;
-    cout << (n - 1) * 2 << endl;
+    int k, a, b, x, y;
+    cin >> k >> a >> b >> x >> y;
+    if (x > y) swap(x, y), swap(a, b);
+    int ans = max((int)0, (k - a + x)) / x;
+    k -= ans * x;
+    ans += max((int)0, (k - b + y)) / y;
+    cout << ans << endl;
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);

@@ -25,7 +25,16 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve(int cs) {
     int n; cin >> n;
-    cout << (n - 1) * 2 << endl;
+    int s; cin >> s;
+    int ans = 0;
+    for (int i = 0; i < n; i++) {
+        int dx, dy; cin >> dx >> dy;
+        int x, y; cin >> x >> y;
+        if (x == y && dx == dy) ans++;
+        else if (x == (s - y) && dx != dy) ans++;
+        else if (s % 2 == 0 && x == s / 2 && y == s / 2) ans++;
+     }
+     cout << ans << endl;
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);
