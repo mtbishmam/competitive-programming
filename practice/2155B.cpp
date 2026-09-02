@@ -22,35 +22,30 @@ using vb = V<bool>; using vvi = V<vi>;
 // TT> using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define rand(l, r) uniform_int_distribution<ll>(l, r)(rng)
-/* Analysis
-    0 and 1 can never be adjacent
-    if total sum is equal to s, then -1
-    if total sum is greater than s, then always possible
-    if total sum less than s
-*/
+
 void solve(int cs) {
-    int n, s; cin >> n >> s;
-    vi a(n); for (auto& i : a) cin >> i;
-    int S = accumulate(all(a), (int)0);
-    if (S == s) cout << -1;
+    int n; cin >> n;
+    int k; cin >> k;
+    if (n * n == k + 1) cout << "NO" << endl;
     else {
-        if (S > s) for (auto& i : a) cout << i << " ";
-        else {
-            int o = count(all(a), 1);
-            int t = count(all(a), 2);
-            int z = count(all(a), 0);
-            if (o % 2 == s % 2) cout << -1;
-            else {
-                if (S + 3 <= s) cout << -1;
-                else {
-                    rep(i,0,z) cout << 0 << " ";
-                    rep(i,0,t) cout << 2 << " ";
-                    rep(i,0,o) cout << 1 << " ";
-                }
-            }
+        V<V<char>> a(n, V<char>(n, 'D'));
+        int nk = n * n - k;
+        if (nk) {
+            a[0][0] = 'R';
+            a[0][1] = 'L';
+            nk -= 2;
+        }
+        for (int j = 2; j < n && nk; j++, nk--) a[0][j] = 'L';
+        for (int i = 1; i < n && nk; i++)
+            for (int j = 0; j < n && nk; j++, nk--)
+                a[i][j] = 'U';
+        cout << "YES" << endl;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++)
+                cout << a[i][j];
+            cout << endl;
         }
     }
-    cout << endl;
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);

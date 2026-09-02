@@ -22,33 +22,32 @@ using vb = V<bool>; using vvi = V<vi>;
 // TT> using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define rand(l, r) uniform_int_distribution<ll>(l, r)(rng)
-/* Analysis
-    0 and 1 can never be adjacent
-    if total sum is equal to s, then -1
-    if total sum is greater than s, then always possible
-    if total sum less than s
-*/
+
 void solve(int cs) {
-    int n, s; cin >> n >> s;
-    vi a(n); for (auto& i : a) cin >> i;
-    int S = accumulate(all(a), (int)0);
-    if (S == s) cout << -1;
-    else {
-        if (S > s) for (auto& i : a) cout << i << " ";
-        else {
-            int o = count(all(a), 1);
-            int t = count(all(a), 2);
-            int z = count(all(a), 0);
-            if (o % 2 == s % 2) cout << -1;
-            else {
-                if (S + 3 <= s) cout << -1;
-                else {
-                    rep(i,0,z) cout << 0 << " ";
-                    rep(i,0,t) cout << 2 << " ";
-                    rep(i,0,o) cout << 1 << " ";
-                }
-            }
+    int n; cin >> n;
+    string s; cin >> s;
+
+    bool bad = 0;
+    vi ans(n); iota(all(ans), 1);
+    auto valid = [&](int l, int r) -> int {
+        for (int i = l; i < r; i++) if (ans[i] == i + 1) return 0;
+        return 1;
+    };
+    for (int i = 0; i < n; i++) {
+        if (s[i] == '1') continue;
+        int j = i + 1;
+        while (j < n && s[j - 1] == s[j]) j++;
+        if (j - i == 1) { bad = 1; break; }
+
+        while (!valid(i, j)) {
+            shuffle(ans.begin() + i, ans.begin() + j, rng);
         }
+        i = j - 1;
+    }
+    if (bad) cout << "NO";
+    else {
+        cout << "YES\n";
+        for (int i = 0; i < n; i++) cout << ans[i] << " ";
     }
     cout << endl;
 }
