@@ -22,51 +22,34 @@ using vb = V<bool>; using vvi = V<vi>;
 // TT> using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define rand(l, r) uniform_int_distribution<ll>(l, r)(rng)
+
 void solve(int cs) {
     string s; cin >> s;
-    long long pos; cin >> pos;
-
+    int k; cin >> k;
     int n = sz(s);
-    int del = 0;
-    int len = n;
 
-    while (pos > len) {
-        pos -= len;
-        len--;
-        del++;
-    }
+    vi suf(n + 2);
+    for (int i = n; i >= 1; i--) suf[i] = i + suf[i + 1];
 
-    string st;
+    int ck = k, del = 0;
+    while (ck-(n-del) >= 0 && del < n) ck -=n-del, del++;
+    del--;
+    dbg(k, del, ck);
 
-    for (char c : s) {
-        while (del > 0 && sz(st) && st.back() > c) {
-            st.pop_back();
-            del--;
+    string ns;
+    for (int i = 0; i < n && del; i++) {
+        ns += s[i];
+        int j = sz(ns)-1;
+        if (j-1>= 0 && ns[j-1] > ns[j]) {
+            if (sz(ns)) ns.pop_back(), del--;
         }
-        st.push_back(c);
     }
+    dbg(ns);
+    while (del-- && sz(ns)) ns.pop_back();
+    dbg(ns);
+    cout << ns[ck];
+    cout << endl;
 
-    while (del > 0) {
-        st.pop_back();
-        del--;
-    }
-
-    cout << st[pos - 1];
-}
-void solve2(int cs) {
-    string s; cin >> s;
-    int p; cin >> p;
-    int n = sz(s);
-    int l = 1, r = n, ans = 0;
-    auto get = [&](int m) {
-        return (n * (n + 1)) / 2 - (m * (m + 1)) / 2;
-    };
-    while (l <= r) {
-        int m = (l + r) >> 1;
-        if (get(m) < p) r = m - 1, ans = m;
-        else l = m + 1;
-    }
-    cout << s[p - get(ans) - 1]; 
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);
