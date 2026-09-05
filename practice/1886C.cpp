@@ -28,27 +28,19 @@ void solve(int cs) {
     int k; cin >> k;
     int n = sz(s);
 
-    vi suf(n + 2);
-    for (int i = n; i >= 1; i--) suf[i] = i + suf[i + 1];
+    int nn = n, del = 0;
+    while (k > n) k -= n--, del++;
+    n = nn;
 
-    int ck = k, del = 0;
-    while (ck-(n-del) >= 0 && del < n) ck -=n-del, del++;
-    del--;
-    dbg(k, del, ck);
-
+//    dbg(del);
     string ns;
-    for (int i = 0; i < n && del; i++) {
+    for (int i = 0; i < n; i++) {
+        while (sz(ns) && ns.back() > s[i] && del) ns.pop_back(), del--;
         ns += s[i];
-        int j = sz(ns)-1;
-        if (j-1>= 0 && ns[j-1] > ns[j]) {
-            if (sz(ns)) ns.pop_back(), del--;
-        }
     }
     dbg(ns);
-    while (del-- && sz(ns)) ns.pop_back();
-    dbg(ns);
-    cout << ns[ck];
-    cout << endl;
+    while (del && sz(ns)) ns.pop_back(), del--;
+    cout << ns[k-1];
 
 }
 signed main() {
