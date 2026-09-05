@@ -24,6 +24,25 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define rand(l, r) uniform_int_distribution<ll>(l, r)(rng)
 
 void solve(int cs) {
+    int n; cin >> n;
+    vi a(n), b(n);
+    for (int i = 0; i < n; i++) cin >> a[i] >> b[i];
+
+    int l = 0, r = n;
+    auto chk = [&](int k) -> int {
+        int x = k - 1, y = 0;
+        for (int i = 0; i < n; i++) {
+            if (a[i] >= x && b[i] >= y) x--, y++;
+            if (x == 0 && y == k - 1) return true;
+        }
+        return false;
+    };
+    while (l <= r) {
+        int mid = (l + r) >> 1;
+        if (chk(mid)) l = mid;
+        else r = mid - 1;
+    }
+    cout << l << endl;
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);
