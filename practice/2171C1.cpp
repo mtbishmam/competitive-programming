@@ -26,23 +26,33 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 void solve(int cs) {
     int n; cin >> n;
     vi a(n), b(n);
-    for (int i = 0; i < n; i++) cin >> a[i] >> b[i];
+    for (int i = 0; i < n; i++) cin >> a[i];
+    for (int i = 0; i < n; i++) cin >> b[i];
 
-    int l = 2, r = n, ans = 1;
-    auto chk = [&](int k) -> int {
-        int x = k - 1, y = 0;
-        for (int i = 0; i < n; i++) {
-            if (a[i] >= x && b[i] >= y) x--, y++;
-            if (x == -1 && y == k) return true;
-        }
-        return false;
-    };
-    while (l <= r) {
-        int mid = (l + r) >> 1;
-        if (chk(mid)) l = mid + 1, ans = mid;
-        else r = mid - 1;
+    int sa, sb; sa = sb = 0;
+    int aa, bb; aa = bb = 0;
+    int ac, bc; ac = bc = 0;
+    for (int i = 0; i < n; i += 2) if (a[i]) sa++;
+    for (int i = 1; i < n; i += 2) if (b[i]) sb++;
+    for (int i = 0; i < n; i += 2) {
+//        if (a[i] && b[i]) sa++;
+        if (!a[i] && b[i]) aa++;
+        if (a[i] && !b[i]) aa++;
     }
-    cout << ans << endl;
+    for (int i = 1; i < n; i += 2) {
+ //       if (a[i] && b[i]) sb++;
+        if (a[i] && !b[i]) bb++;
+        if (!a[i] && b[i]) bb++;
+    }
+    sa &= 1, sb &= 1;
+    if (aa == bb) {
+        if (sa == sb) cout << "Tie" << endl;
+        else cout << (sa > sb ? "Ajisai" : "Mai") << endl;
+    } else {
+        if (aa > bb) cout << (sa < sb ? "Tie" : "Ajisai") << endl;
+        else cout << (sa > sb ? "Tie" : "Mai") << endl;
+        if (cs == 6) dbg(sa, sb, aa, bb);
+    }
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);

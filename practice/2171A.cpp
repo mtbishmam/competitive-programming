@@ -25,23 +25,10 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 void solve(int cs) {
     int n; cin >> n;
-    vi a(n), b(n);
-    for (int i = 0; i < n; i++) cin >> a[i] >> b[i];
-
-    int l = 2, r = n, ans = 1;
-    auto chk = [&](int k) -> int {
-        int x = k - 1, y = 0;
-        for (int i = 0; i < n; i++) {
-            if (a[i] >= x && b[i] >= y) x--, y++;
-            if (x == -1 && y == k) return true;
-        }
-        return false;
-    };
-    while (l <= r) {
-        int mid = (l + r) >> 1;
-        if (chk(mid)) l = mid + 1, ans = mid;
-        else r = mid - 1;
-    }
+    int ans = 0;
+    for (int i = 0; i <= n/2; i++)
+        for (int j = 0; j <= n/4; j++)
+            if (i * 2 + j * 4 == n) ans++;
     cout << ans << endl;
 }
 signed main() {
