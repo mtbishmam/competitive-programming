@@ -1,0 +1,94 @@
+" Miscelaneous
+set numerichints
+set typelinkhints
+
+" Key bindings
+
+unmap <C-6>
+
+unmap u
+unmap d
+unmap e
+unmap x
+unmap H
+unmap J
+unmap K
+unmap L
+
+map d closeTab
+map u lastClosedTab
+
+map <C-d> scrollPageDown
+map <C-u> scrollPageUp
+
+map <C-i> goForward
+map <C-o> goBack
+
+map <A-l> nextTab
+map <A-h> previousTab
+
+map L moveTabRight
+map H moveTabLeft
+
+" Site specific stuffs
+
+" Search engines
+let searchalias g = "google"
+let searchalias gi = "google-images"
+let searchalias gm = "google-maps"
+let searchalias w = "wikipedia"
+let searchalias wa = "wolframalpha"
+
+" Quick marks and shortcuts
+let qmark m = ["mail.google.com/mail"]
+let qmark s = ["montavista.schoolloop.com"]
+let qmark S = ["montavista.schoolloop.com/portal/login"]
+
+" Custom bindings
+
+site '*://mail.google.com/*' {
+  unmapAll
+  map : openCommandBar
+  map <A-l> nextTab
+  map <A-h> previousTab
+}
+
+site '*://calendar.google.com/*' {
+  unmapAll
+  map : openCommandBar
+  map <A-l> nextTab
+  map <A-h> previousTab
+}
+
+site '*://drive.google.com/*' {
+  unmapAll
+  map : openCommandBar
+  map <A-l> nextTab
+  map <A-h> previousTab
+}
+
+site '*://docs.google.com/*' {
+  unmapAll
+  map : openCommandBar
+  map <A-l> nextTab
+  map <A-h> previousTab
+}
+
+site '*://talkgadget.google.com/*' {
+  unmapAll
+  map : openCommandBar
+  map <A-l> nextTab
+  map <A-h> previousTab
+}
+
+site '*://www.overleaf.com/*' {
+  unmapAll
+}
+
+site '*://www.reddit.com/*' {
+  unmapAll
+  map : openCommandBar
+  map <A-l> nextTab
+  map <A-h> previousTab
+  map d closeTab
+}

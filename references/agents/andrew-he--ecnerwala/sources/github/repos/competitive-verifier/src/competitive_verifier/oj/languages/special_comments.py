@@ -1,0 +1,50 @@
+# Python Version: 3.x
+import functools
+import pathlib
+import re
+from collections.abc import Iterable, Mapping
+from logging import getLogger
+
+from competitive_verifier.util import read_text_normalized
+
+logger = getLogger(__name__)
+
+SPECIAL_COMMENTS_PATTERN = re.compile(
+    r"(?:verify-helper|verification-helper|competitive-verifier):\s*([0-9A-Za-z_]+)(?:\s(.*))?$"
+)
+
+
+# special comments like Vim and Python: see https://www.python.org/dev/peps/pep-0263/
+@functools.cache
+def list_special_comments(path: pathlib.Path) -> Mapping[str, str]:
+    attributes: dict[str, str] = {}
+    for line in read_text_normalized(path).splitlines():
+        matched = SPECIAL_COMMENTS_PATTERN.search(line)
+        if matched:
+            key = matched.group(1)
+            value = (matched.group(2) or "").strip()
+            attributes[key] = value
+    return attributes
+
+
+def _unquote(s: str) -> str:
+    if s.startswith(("'", '"', "`")):
+        end_quote_pos = s.rfind(s[0])
+        if end_quote_pos == 0:
+            # Remove opening quote from the URL like `"https://atcoder.jp/`
+            return s[1:]
+        # Remove quotes and trailing superfluous chars around the URL
+        return s[1:end_quote_pos]
+    return s
+
+
+@functools.cache
+def list_embedded_urls(path: pathlib.Path) -> Iterable[str]:
+    pattern = re.compile(
+        r"""['"`]?https?://\S*"""
+    )  # use a broad pattern. There are no needs to make match strict.
+    content = read_text_normalized(path)
+    # The URL may be written like `"https://atcoder.jp/"`. In this case, we need to remove `"`s around the URL.
+    # We also need to remove trailing superfluous chars in a case like `{"url":"https://atcoder.jp/"}`.
+    urls = {_unquote(url) for url in pattern.findall(content)}
+    return sorted(urls)

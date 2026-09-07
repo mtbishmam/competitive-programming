@@ -1,0 +1,44 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+/build/
+
+# pregenerated bundles (scripts/bundle.py --all)
+/dist/
+
+# competitive-verifier artifacts
+/.competitive-verifier/bundled/
+/.competitive-verifier/cache/
+/verify_files.json
+__pycache__/
+/coverage/

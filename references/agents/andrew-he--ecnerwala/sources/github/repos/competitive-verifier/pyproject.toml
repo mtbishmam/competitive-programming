@@ -1,0 +1,271 @@
+[tool.poetry]
+name = "competitive-verifier"
+version = "4.1.2"
+description = "Verifier for libraries of competitive programming"
+
+license = "MIT"
+authors = ["kzrnm <gengesa@gmail.com>"]
+
+repository = "https://github.com/competitive-verifier/competitive-verifier"
+homepage = "https://github.com/competitive-verifier/competitive-verifier"
+readme = "README.md"
+
+packages = [
+    { include = "competitive_verifier", from = "src" },
+    { include = "competitive_verifier_resources", from = "src" },
+]
+include = [{ path = "tests", format = "sdist" }]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+competitive-verifier = "competitive_verifier.app:main"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+colorlog = "^6.10.1"
+colorama = "^0.4.6"
+pydantic = "^2.12.5"
+pyyaml = "^6.0.3"
+importlab = "^0.8.1"
+charset-normalizer = "^3.4.4"
+tomli = { version = "^2.0.1", python = "<3.11" }
+requests = "^2.32.5"
+appdirs = "^1.4.4"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^9.0.2"
+pytest-mock = "^3.15.1"
+pytest-order = "^1.3.0"
+pytest-cov = "^7.0.0"
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.43.0"
+ruff = "^0.14.10"
+pyright = "^1.1.407"
+
+[tool.poe]
+envfile.optional = [".env"]
+
+[tool.poe.tasks]
+ruff-check = "ruff check --fix"
+ruff-format = "ruff format"
+pyright = "pyright src/competitive_verifier tests"
+format = ["ruff-format", "ruff-check", "pyright"]
+"lint:check" = "ruff check"
+"lint:format" = "ruff format --check"
+lint.parallel = ["lint:check", "lint:format", "pyright"]
+test = "pytest"
+test-quick = "pytest -m 'not integration'"
+test-integration = "pytest -m integration"
+test-use-prev-dest = "poe test --use-prev-dest"
+
+test-cov = { cmd = 'pytest -m="${integration:-}" --cov=${cov} --cov-branch --cov-report=html ${FILE_PATHS}', args = [
+    { name = "integration", type = "boolean", default = "not integration" },
+    { name = "cov", default = "." },
+    { name = "FILE_PATHS", positional = true, multiple = true },
+] }
+
+test-cov-watch = { shell = 'while true; do poe test-cov --mark="${integration:-integration}" --cov=${cov} ; sleep ${sleep}; done', args = [
+    { name = "integration", type = "boolean", default = "not integration" },
+    { name = "cov", default = "." },
+    { name = "sleep", default = "2s" },
+] }
+
+"jekyll:serve" = { cmd = "bundle exec jekyll serve --incremental --livereload", cwd = ".competitive-verifier/_jekyll" }
+"jekyll:init" = { shell = "bundle config set --local path '.vendor/bundle'; bundle install", cwd = ".competitive-verifier/_jekyll" }
+
+"schema:write" = [
+    { ref = "schema:verify_files", capture_stdout = "schema/verify_files.schema.json" },
+    { ref = "schema:verify_result", capture_stdout = "schema/verify_result.schema.json" },
+    { ref = "deafult:config_yml", capture_stdout = ".competitive-verifier/docs/_config.default.yml" },
+]
+
+# schema
+[tool.poe.tasks."schema:verify_files"]
+expr = "json.dumps(competitive_verifier.models.VerificationInput.model_json_schema(), indent=2)"
+imports = ["json", "competitive_verifier.models"]
+[tool.poe.tasks."schema:verify_result"]
+expr = "json.dumps(competitive_verifier.models.VerifyCommandResult.model_json_schema(), indent=2)"
+imports = ["json", "competitive_verifier.models"]
+[tool.poe.tasks."deafult:config_yml"]
+expr = "competitive_verifier.documents.config.ConfigYaml().model_dump_yml().decode(encoding='utf-8')"
+imports = ["json", "competitive_verifier.documents.config"]
+
+# dev
+[tool.poe.tasks."dev-oj-resolve"]
+cmd = "competitive-verifier oj-resolve --include examples --config examples/config.toml"
+capture_stdout = ".competitive-verifier/tmp/all-verify_files.json"
+
+[tool.poe.tasks."dev-verify"]
+cmd = "competitive-verifier verify --output .competitive-verifier/tmp/all-result.json"
+env = { COMPETITIVE_VERIFY_FILES_PATH.default = ".competitive-verifier/tmp/all-verify_files.json" }
+
+[tool.poe.tasks."dev-docs"]
+cmd = "competitive-verifier docs .competitive-verifier/tmp/all-result.json --include examples/"
+env = { COMPETITIVE_VERIFY_FILES_PATH.default = ".competitive-verifier/tmp/all-verify_files.json" }
+
+[tool.poe.tasks."dev-external-verify"]
+cmd = "competitive-verifier verify --output .competitive-verifier/tmp/result.json"
+env = { COMPETITIVE_VERIFY_FILES_PATH.default = "examples/external/verify_files.json" }
+
+[tool.poe.tasks."dev-external-docs"]
+cmd = "competitive-verifier docs .competitive-verifier/tmp/result.json --include examples/"
+env = { COMPETITIVE_VERIFY_FILES_PATH.default = "examples/external/verify_files.json" }
+
+# serve local documents
+[tool.poe.tasks.serve]
+env = { _COMPETITIVE_SERVE_DIR = ".competitive-verifier/_jekyll" }
+[[tool.poe.tasks.serve.sequence]]
+default = "pass"
+[tool.poe.tasks.serve.sequence.control]
+expr = "os.path.isdir(os.getenv('_COMPETITIVE_SERVE_DIR'))"
+imports = ["os"]
+[[tool.poe.tasks.serve.sequence.switch]]
+case = "False"
+ref = "dev-docs"
+[[tool.poe.tasks.serve.sequence]]
+ref = "_serve"
+
+[tool.poe.tasks.serve-handmade]
+env = { _COMPETITIVE_SERVE_DIR = "integration_test_data/dst_dir/documents/handmade/test_hand_docs" }
+[[tool.poe.tasks.serve-handmade.sequence]]
+default = "pass"
+[tool.poe.tasks.serve-handmade.sequence.control]
+expr = "os.path.isdir(os.getenv('_COMPETITIVE_SERVE_DIR'))"
+imports = ["os"]
+[[tool.poe.tasks.serve-handmade.sequence.switch]]
+case = "False"
+cmd = "pytest --use-prev-dest tests/integration/test_command_docs.py::test_hand_docs"
+[[tool.poe.tasks.serve-handmade.sequence]]
+ref = "_serve"
+
+
+[tool.poe.tasks._serve]
+[[tool.poe.tasks._serve.sequence]]
+default = "pass"
+[tool.poe.tasks._serve.sequence.control]
+expr = "os.path.isdir(os.getenv('_COMPETITIVE_SERVE_DIR')+'/.vendor')"
+imports = ["os"]
+[[tool.poe.tasks._serve.sequence.switch]]
+case = "False"
+ref = "jekyll:init"
+cwd = "${_COMPETITIVE_SERVE_DIR}"
+
+[[tool.poe.tasks._serve.sequence]]
+ref = "jekyll:serve"
+cwd = "${_COMPETITIVE_SERVE_DIR}"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+
+exclude = [
+    "examples",
+    "src/competitive_verifier_resources/jekyll",
+    "integration_test_data",
+]
+
+[tool.ruff.lint]
+typing-extensions = false
+allowed-confusables = ["ノ"]
+
+select = ["ALL"]
+ignore = [
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D105",
+    "D107",
+    "D200",
+    "E741",
+    "S603",
+    "COM812",
+    "PLR0913",
+    "ANN201",
+    "ANN202",
+    "ANN204",
+    "ANN206",
+    "EM101",
+    "EM102",
+    "PTH207",
+    "TRY003",
+    "FBT003",
+    "LOG007",
+
+    # Remove on Python 3.12
+    "ARG002",
+
+]
+
+# TODO: Make these settings stricter later
+[tool.ruff.lint.mccabe]
+max-complexity = 18
+
+[tool.ruff.lint.pylint]
+max-branches = 18
+max-statements = 75
+
+[tool.ruff.lint.flake8-annotations]
+allow-star-arg-any = true
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 320
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["D104", "F401"]
+"tests/**" = [
+    "ARG",
+    "DTZ",
+    "S101",
+    "S311",
+    "S604",
+    "N802",
+    "N806",
+    "N816",
+    "TID252",
+    "FBT001",
+    "FBT001",
+    "FBT003",
+    "ANN401",
+    "PLR0911",
+    "PLR2004",
+    "PLR0913",
+]
+"src/competitive_verifier/*/main.py" = ["BLE001"]
+"src/competitive_verifier/**" = ["T201"]
+"src/competitive_verifier/oj/languages/**" = [
+    "S101",
+    "C901",
+    "PLR0912",
+    "PLR0915",
+]
+
+[tool.pyright]
+pythonVersion = "3.10"
+typeCheckingMode = "strict"
+include = ["src", "tests"]
+ignore = ["src/competitive_verifier_resources/jekyll"]
+reportMissingImports = true
+reportMissingTypeStubs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: integresion test.",
+    "allow_mkdir: indicates that pathlib.Path.mkdir, which is generally disallowed in tests, is being used.",
+]
+filterwarnings = [
+    "ignore:.*filter extracted tar archives and reject files or modify their metadata.*:DeprecationWarning",
+]
+
+[tool.coverage.run]
+omit = ["tests/*", "src/competitive_verifier/migrate/migration.py"]
+[tool.coverage.report]
+exclude_also = ['raise NotImplementedError', 'class \w+\(Protocol\):']

@@ -1,0 +1,26 @@
+"3.8.2 (created: 2014/02/13 23:52:43)
+
+map <BS> H
+map <S-BS> L
+map gh gT
+map gl gt
+map <A-h> gh
+map <A-l> gl
+map <A-Left> <A-h>
+map <A-Right> <A-l>
+map <A-S-H> :tabmove -1<Enter>
+map <A-S-L> :tabmove +1<Enter>
+map <A-S-Left> <A-S-H>
+map <A-S-Right> <A-S-L>
+
+autocmd PageLoad about:home :extd Pushbullet
+autocmd PageLoad about:home :exte Pushbullet
+
+"autocmd PageLoad .* :set gui=nonavigation
+
+set gui=nonavigation
+
+source! ~/.vimperatorrc.local
+
+
+" vim: set ft=vimperator:

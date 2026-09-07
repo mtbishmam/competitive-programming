@@ -1,0 +1,28 @@
+{
+  "total_count": 1,
+  "incomplete_results": false,
+  "items": [
+    {
+      "login": "jsleeds",
+      "id": 137305609,
+      "node_id": "U_kgDOCC8eCQ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/137305609?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jsleeds",
+      "html_url": "https://github.com/jsleeds",
+      "followers_url": "https://api.github.com/users/jsleeds/followers",
+      "following_url": "https://api.github.com/users/jsleeds/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jsleeds/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jsleeds/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jsleeds/subscriptions",
+      "organizations_url": "https://api.github.com/users/jsleeds/orgs",
+      "repos_url": "https://api.github.com/users/jsleeds/repos",
+      "events_url": "https://api.github.com/users/jsleeds/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jsleeds/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false,
+      "score": 1.0
+    }
+  ]
+}

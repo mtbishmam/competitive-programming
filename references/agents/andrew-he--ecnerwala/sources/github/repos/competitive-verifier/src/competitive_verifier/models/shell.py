@@ -1,0 +1,98 @@
+import pathlib
+from subprocess import CompletedProcess
+from typing import Annotated, Literal, overload
+
+from pydantic import BaseModel, Field
+from typing_extensions import TypeAliasType
+
+from competitive_verifier.exec import exec_command
+
+
+class ShellCommand(BaseModel):
+    command: list[str] | str = Field(
+        description="Shell command",
+    )
+    """Shell command
+    """
+
+    env: dict[str, str] | None = Field(
+        default=None,
+        description="Envitonment variables for command",
+    )
+    """Envitonment variables for command
+    """
+
+    cwd: pathlib.Path | None = Field(
+        default=None,
+        description="The working directory of child process.",
+    )
+    """The working directory of child process.
+    """
+
+    @overload
+    def exec_command(
+        self,
+        *,
+        text: Literal[False] = False,
+        check: bool = False,
+        capture_output: bool = False,
+        group_log: bool = False,
+    ) -> CompletedProcess[bytes]: ...
+
+    @overload
+    def exec_command(
+        self,
+        *,
+        text: Literal[True],
+        check: bool = False,
+        capture_output: bool = False,
+        group_log: bool = False,
+    ) -> CompletedProcess[str]: ...
+
+    def exec_command(
+        self,
+        *,
+        text: bool = False,
+        check: bool = False,
+        capture_output: bool = False,
+        group_log: bool = False,
+    ) -> CompletedProcess[str] | CompletedProcess[bytes]:
+        return exec_command(
+            command=self.command,
+            env=self.env,
+            text=text,
+            check=check,
+            capture_output=capture_output,
+            cwd=self.cwd,
+            group_log=group_log,
+        )
+
+    @classmethod
+    def parse_command_like(cls, cmd: "ShellCommandLike") -> "ShellCommand":
+        if isinstance(cmd, (str, list)):
+            return ShellCommand(command=cmd)
+        return cmd
+
+
+ShellCommandLike = TypeAliasType(
+    "ShellCommandLike",
+    Annotated[
+        ShellCommand | list[str] | str,
+        Field(
+            examples=[
+                "command",
+                ["command", "arg1", "arg2"],
+                ShellCommand(
+                    command=["command", "arg1", "arg2"],
+                    env={"ENVVAR": "DUMMY"},
+                    cwd=pathlib.Path("/work"),
+                ),
+                ShellCommand(
+                    command="command",
+                    env={"ENVVAR": "DUMMY"},
+                    cwd=pathlib.Path("/work"),
+                ),
+            ]
+        ),
+    ],
+)

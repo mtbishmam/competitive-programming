@@ -1,0 +1,13 @@
+[languages.awk]
+compile = "bash -c 'echo hello > {tempdir}/hello'"
+execute = "env AWKPATH={basedir} awk -f {path}"
+bundle = "false"
+list_dependencies = "sed 's/^@include \"\\(.*\\)\"$/\\1/ ; t ; d' {path}"
+
+[languages.txt]
+execute = "true"
+list_dependencies = ""
+
+[languages.hello]
+execute = { command = "grep Hello {path}", cwd = "{basedir}" }
+list_dependencies = 'find {basedir}/{dir} -type f -name "*.hello"'

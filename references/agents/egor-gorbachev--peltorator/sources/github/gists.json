@@ -1,0 +1,51 @@
+[
+  {
+    "url": "https://api.github.com/gists/d582600678c7b44acd034d6911edde56",
+    "forks_url": "https://api.github.com/gists/d582600678c7b44acd034d6911edde56/forks",
+    "commits_url": "https://api.github.com/gists/d582600678c7b44acd034d6911edde56/commits",
+    "id": "d582600678c7b44acd034d6911edde56",
+    "node_id": "MDQ6R2lzdGQ1ODI2MDA2NzhjN2I0NGFjZDAzNGQ2OTExZWRkZTU2",
+    "git_pull_url": "https://gist.github.com/d582600678c7b44acd034d6911edde56.git",
+    "git_push_url": "https://gist.github.com/d582600678c7b44acd034d6911edde56.git",
+    "html_url": "https://gist.github.com/peltorator/d582600678c7b44acd034d6911edde56",
+    "files": {
+      "how_to_live.md": {
+        "filename": "how_to_live.md",
+        "type": "text/markdown",
+        "language": "Markdown",
+        "raw_url": "https://gist.githubusercontent.com/peltorator/d582600678c7b44acd034d6911edde56/raw/78138e7e08f204c193409ddc102eae793779f3d3/how_to_live.md",
+        "size": 6405
+      }
+    },
+    "public": true,
+    "created_at": "2021-04-23T11:04:58Z",
+    "updated_at": "2021-04-23T11:05:35Z",
+    "description": "Инструкция по выполнению заданий по haskell на кружке Tinkoff A 2021",
+    "comments": 0,
+    "user": null,
+    "comments_enabled": true,
+    "comments_url": "https://api.github.com/gists/d582600678c7b44acd034d6911edde56/comments",
+    "owner": {
+      "login": "peltorator",
+      "id": 25479468,
+      "node_id": "MDQ6VXNlcjI1NDc5NDY4",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25479468?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/peltorator",
+      "html_url": "https://github.com/peltorator",
+      "followers_url": "https://api.github.com/users/peltorator/followers",
+      "following_url": "https://api.github.com/users/peltorator/following{/other_user}",
+      "gists_url": "https://api.github.com/users/peltorator/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/peltorator/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/peltorator/subscriptions",
+      "organizations_url": "https://api.github.com/users/peltorator/orgs",
+      "repos_url": "https://api.github.com/users/peltorator/repos",
+      "events_url": "https://api.github.com/users/peltorator/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/peltorator/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "truncated": false
+  }
+]

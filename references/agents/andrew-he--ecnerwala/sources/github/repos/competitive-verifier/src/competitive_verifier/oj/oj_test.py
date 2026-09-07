@@ -1,0 +1,503 @@
+import math
+import os
+import pathlib
+import platform
+import shlex
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+from collections import Counter
+from dataclasses import dataclass
+from logging import getLogger
+from typing import BinaryIO
+
+from competitive_verifier.log import GitHubMessageParams
+from competitive_verifier.models import (
+    JudgeStatus,
+    ResultStatus,
+    TestCaseProvider,
+    TestcaseResult,
+    VerifcationTimeoutError,
+    VerificationResult,
+)
+
+from . import gnu
+from .format import Printer, green, red
+
+logger = getLogger(__name__)
+
+
+class CaseExecutionError(Exception):
+    pass
+
+
+@dataclass
+class OjExecInfo:
+    answer: str | None
+    """The standard output of the executed command"""
+    elapsed: float
+    """The elapsed time of the executed command in seconds"""
+    memory: float | None
+    """The maximum memory usage of the executed command in megabytes"""
+    returncode: int | None
+    """The returncode of the executed command"""
+
+
+def measure_command(
+    command: list[str] | str,
+    *,
+    env: dict[str, str] | None = None,
+    stdin: BinaryIO | int | None = None,
+    timeout: float | None = None,
+    gnu_time: bool = False,
+) -> OjExecInfo:
+    if isinstance(command, str):
+        command = shlex.split(command)
+
+    if len(command) == 0:
+        raise CaseExecutionError
+
+    with gnu.GnuTimeWrapper(enabled=gnu_time) as gw:
+        if shutil.which(command[0]) is None:
+            raise CaseExecutionError
+
+        command = gw.get_command(command)
+        begin = time.perf_counter()
+
+        # We need kill processes called from the "time" command using process groups. Without this, orphans spawn. see https://github.com/kmyk/online-judge-tools/issues/640
+        start_new_session = gw.gnu_time is not None
+
+        try:
+            if env is not None:
+                env = os.environ | env
+            proc = subprocess.run(
+                command,
+                env=env,
+                timeout=timeout,
+                stdin=stdin,
+                stdout=subprocess.PIPE,
+                stderr=sys.stderr,
+                encoding="utf-8",
+                start_new_session=start_new_session,
+                check=False,
+            )
+            answer = proc.stdout
+            returncode = proc.returncode
+        except subprocess.TimeoutExpired:
+            answer = None
+            returncode = None
+        except Exception as e:
+            logger.exception(
+                "'%s' is not executable.",
+                command,
+                extra={"github": GitHubMessageParams()},
+            )
+            raise CaseExecutionError from e
+
+        end = time.perf_counter()
+        return OjExecInfo(
+            answer=answer,
+            elapsed=end - begin,
+            memory=gw.get_memory(),
+            returncode=returncode,
+        )
+
+
+@dataclass
+class OjTestArguments:
+    """Parameters for oj-test command.
+
+    Port of onlinejudge_command.subcommand.test.add_subparser.
+    """
+
+    command: str | list[str]
+    problem: TestCaseProvider
+    tle: float | None
+    mle: float | None
+    error: float | None
+    env: dict[str, str] | None = None
+    deadline: float = float("inf")
+
+
+@dataclass
+class OjTestcaseResult:
+    name: str
+    """A name of the test case."""
+    input: pathlib.Path
+    """A input of the test case."""
+    answer: str
+    """A output of the test case."""
+    expected: pathlib.Path
+    """A expected output of the test case."""
+
+    status: JudgeStatus
+    elapsed: float
+    exitcode: int | None
+
+    memory: float | None = None
+
+    def __post_init__(self):
+        if not isinstance(self.exitcode, int):
+            self.exitcode = None
+
+    def __str__(self) -> str:
+        p = [
+            f"{self.name}: {green('AC')}"
+            if self.status == JudgeStatus.AC
+            else f"{self.name}: {red(self.status.name)}",
+            f"time: {self.elapsed:f} sec",
+            f"memory: {self.memory:f} MB" if self.memory is not None else None,
+            f"return code: {self.exitcode}" if self.exitcode else None,
+        ]
+
+        return ", ".join(filter(None, p))
+
+    def log(self):
+        match self.status:
+            case JudgeStatus.AC:
+                pass
+            case JudgeStatus.RE | JudgeStatus.TLE:
+                self._log_input()
+                self._log_expected()
+            case _:
+                self._log_input()
+                self._log_answer()
+                self._log_expected()
+        logger.info(self)
+
+    def _log_input(self) -> None:
+        logger.info("%s:input: %s", self.name, Printer(self.input))
+
+    def _log_expected(self) -> None:
+        logger.info("%s:expected: %s", self.name, Printer(self.expected))
+
+    def _log_answer(self) -> None:
+        logger.info("%s:answer: %s", self.name, Printer(self.answer))
+
+
+@dataclass
+class OjTestResult:
+    is_success: bool
+
+    elapsed: float
+
+    slowest: float
+    """max time [seconds]
+    """
+
+    heaviest: float
+    """max memory [MB]
+    """
+
+    testcases: list[OjTestcaseResult]
+
+
+def _try_parse_float(value: str) -> float | None:
+    try:
+        return float(value)
+    except ValueError:
+        return None
+
+
+def _equal_or_closed_float(actual: str, expected: str, *, error: float) -> bool:
+    if actual == expected:
+        return True
+
+    x = _try_parse_float(actual)
+    y = _try_parse_float(expected)
+
+    return (
+        x is not None
+        and y is not None
+        and math.isclose(x, y, rel_tol=error, abs_tol=error)
+    )
+
+
+def compare_answer(actual: str, expected: str, *, error: float | None) -> bool:
+    """Compare two byte strings.
+
+    Args:
+        actual (bytes): Actual output
+        expected (bytes): Expected output
+        error (float | None): Margin of error
+    Returns:
+        bool: True if they are considered equal
+    """
+    actual = actual.replace("\r\n", "\n")
+    expected = expected.replace("\r\n", "\n")
+
+    # match
+    if actual == expected:
+        return True
+
+    try:
+        if error is None:
+            actual_words = actual.split()
+            expected_words = expected.split()
+            if all(x == y for x, y in zip(actual_words, expected_words, strict=True)):
+                logger.warning("This was AC if spaces and newlines were ignored.")
+            return False
+
+        actual_lines = actual.rstrip("\n").split("\n")
+        expected_lines = expected.rstrip("\n").split("\n")
+
+        for actual_line, expected_line in zip(
+            actual_lines, expected_lines, strict=True
+        ):
+            actual_words = actual_line.split()
+            expected_words = expected_line.split()
+
+            for x, y in zip(actual_words, expected_words, strict=True):
+                if not _equal_or_closed_float(x, y, error=error):
+                    return False
+    except ValueError:
+        return False
+
+    return True
+
+
+def special_judge(
+    judge_command: str,
+    output: str,
+    *,
+    input_path: pathlib.Path,
+    expected_output_path: pathlib.Path | None,
+) -> bool:
+    with tempfile.TemporaryDirectory() as tempdir:
+        actual_output_path = pathlib.Path(tempdir) / "actual.out"
+        actual_output_path.write_text(output)
+
+        command = [
+            *shlex.split(judge_command),
+            str(input_path.resolve()),
+            str(actual_output_path.resolve()),
+            str(
+                expected_output_path.resolve()
+                if expected_output_path is not None
+                else ""
+            ),
+        ]
+
+        logger.debug("$ %s", command)
+        info = measure_command(command)
+    logger.debug("judge's output: %s", Printer(info.answer or ""))
+    return info.returncode == 0
+
+
+def determine_status(
+    *,
+    exitcode: int | None,
+    memory: float | None,
+    mle: float | None,
+    match_result: bool | None,
+) -> JudgeStatus:
+    if exitcode is None:
+        return JudgeStatus.TLE
+    if memory is not None and mle is not None and memory > mle:
+        return JudgeStatus.MLE
+    if exitcode != 0:
+        return JudgeStatus.RE
+    if match_result is not None and not match_result:
+        return JudgeStatus.WA
+    return JudgeStatus.AC
+
+
+def single_case(
+    test_name: str,
+    test_input_path: pathlib.Path,
+    test_output_path: pathlib.Path,
+    *,
+    args: OjTestArguments,
+) -> OjTestcaseResult:
+    try:
+        logger.info("%s: start", test_name)
+
+        # run the binary
+        with test_input_path.open("rb") as infp:
+            info = measure_command(
+                args.command,
+                env=args.env,
+                stdin=infp,
+                timeout=args.tle,
+                gnu_time=True,
+            )
+            answer = info.answer or ""
+            elapsed: float = info.elapsed
+            memory: float | None = info.memory
+
+        match_result = (
+            special_judge(
+                str(args.problem.checker),
+                answer,
+                input_path=test_input_path,
+                expected_output_path=test_output_path,
+            )
+            if args.problem.checker
+            else compare_answer(answer, test_output_path.read_text(), error=args.error)
+        )
+
+        status = determine_status(
+            exitcode=info.returncode,
+            memory=memory,
+            mle=args.mle,
+            match_result=match_result,
+        )
+
+        result = OjTestcaseResult(
+            name=test_name,
+            input=test_input_path,
+            expected=test_output_path,
+            answer=answer,
+            status=status,
+            exitcode=info.returncode,
+            elapsed=elapsed,
+            memory=memory,
+        )
+    except CaseExecutionError:
+        logger.exception(
+            "Failed to run: %s",
+            args,
+            extra={"github": GitHubMessageParams()},
+        )
+        return OjTestcaseResult(
+            name=test_name,
+            input=test_input_path,
+            expected=test_output_path,
+            answer="",
+            status=JudgeStatus.RE,
+            exitcode=255,
+            elapsed=0,
+            memory=None,
+        )
+    else:
+        result.log()
+        return result
+
+
+def gnu_time_message(args: OjTestArguments):
+    """Check wheather GNU time is available.
+
+    Show messages if GNU time is not available.
+    """
+    if gnu.time_command() is None:
+        if platform.system() == "Darwin":
+            logger.info(
+                "[HINT]: You can install GNU time with: $ brew install gnu-time",
+                extra={"github": GitHubMessageParams()},
+            )
+        if args.mle is not None:
+            logger.warning(
+                "--mle is used but GNU time does not exist",
+                extra={"github": GitHubMessageParams()},
+            )
+
+
+class _StatusCounter(Counter[JudgeStatus]):
+    def __str__(self) -> str:
+        return ", ".join(
+            f"{cnt} {name}"
+            for name, cnt in ((st.name, self.get(st)) for st in JudgeStatus)
+            if cnt
+        )
+
+
+def summarize(history: list[OjTestcaseResult]):
+    elapsed: float = 0.0
+    slowest: float = -1.0
+    slowest_name: str | None = None
+    heaviest: float = -1.0
+    heaviest_name: str | None = None
+    counter = _StatusCounter()
+    for result in history:
+        counter[result.status] += 1
+        elapsed += result.elapsed
+        if slowest < result.elapsed:
+            slowest = result.elapsed
+            slowest_name = result.name
+        if result.memory is not None and heaviest < result.memory:
+            heaviest = result.memory
+            heaviest_name = result.name
+
+    # print the summary
+    if slowest_name is not None:
+        logger.info("slowest: %f sec  (for %s)", slowest, slowest_name)
+    if heaviest_name is not None:
+        logger.info("max memory: %f MB  (for %s)", heaviest, heaviest_name)
+
+    length = len(history)
+    is_success = counter[JudgeStatus.AC] == length
+    if is_success:
+        logger.info("%s %d cases", green("SUCCESS"), length)
+    else:
+        logger.info("%s %s / %d cases", red("FAILURE"), counter, length)
+
+    # return the result
+    return OjTestResult(
+        is_success=is_success,
+        slowest=slowest,
+        elapsed=elapsed,
+        heaviest=heaviest,
+        testcases=history,
+    )
+
+
+def _run(args: OjTestArguments) -> OjTestResult:
+    gnu_time_message(args)
+
+    if args.error is not None and args.error > 1:
+        logger.warning(
+            "the tolerance is too large: relative = %s",
+            args.error,
+            extra={"github": GitHubMessageParams()},
+        )
+
+    tests = list(args.problem.iter_system_cases())
+
+    # run tests
+    history: list[OjTestcaseResult] = []
+    for t in tests:
+        if time.perf_counter() > args.deadline:
+            raise VerifcationTimeoutError
+
+        history.append(single_case(t.name, t.input_path, t.output_path, args=args))
+
+    return summarize(history)
+
+
+def main(
+    *,
+    problem: TestCaseProvider,
+    command: str | list[str],
+    env: dict[str, str] | None,
+    tle: float | None,
+    mle: float | None,
+    error: float | None,
+    deadline: float = float("inf"),
+) -> VerificationResult:
+    args = OjTestArguments(
+        command=command,
+        problem=problem,
+        env=env,
+        tle=tle,
+        mle=mle,
+        error=error,
+        deadline=deadline,
+    )
+    result = _run(args)
+    return VerificationResult(
+        status=ResultStatus.SUCCESS if result.is_success else ResultStatus.FAILURE,
+        elapsed=result.elapsed,
+        slowest=result.slowest,
+        heaviest=result.heaviest,
+        testcases=[
+            TestcaseResult(
+                name=case.name,
+                elapsed=case.elapsed,
+                memory=case.memory,
+                status=case.status,
+            )
+            for case in result.testcases
+        ],
+    )

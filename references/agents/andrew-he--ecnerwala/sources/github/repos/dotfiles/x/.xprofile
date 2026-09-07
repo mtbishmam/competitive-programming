@@ -1,0 +1,33 @@
+#!/bin/zsh
+
+XUSERFILESEARCHPATH=/home/andrew/.app-defaults/%N%C
+export XUSERFILESEARCHPATH
+
+unset SSH_ASKPASS
+
+xset mouse 2/1 0 &
+
+#obselete from libinput
+#syndaemon -K -i 1 -d &
+
+#[ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap &
+
+#xkbcomp -I$HOME/.xkb $HOME/.xkb/keymap/default $DISPLAY
+
+[ -f ~/.xbindkeysrc ] && xbindkeys -p &
+
+[ -f ~/.Xresources ] && xrdb -merge ~/.Xresources &
+
+[ -f ~/.screenlayout/auto-config.sh ] && srandrd ~/.screenlayout/auto-config.sh && ~/.screenlayout/auto-config.sh &
+
+xrandr --output eDP1 --primary &
+
+[ -f ~/.fehbg ] && ~/.fehbg &
+
+lxpolkit &
+
+eval $(ssh-agent)
+
+~/.starttray.sh &
+
+export TERMINAL=alacritty

@@ -1,0 +1,45 @@
+---
+permalink: /
+author_profile: true
+redirect_from: 
+  - /about/
+  - /about.html
+---
+
+<h1 style="text-decoration: underline;">Publications:</h1>
+
+<!---{% if site.author.googlescholar %}
+  <div class="wordwrap">see also: <a href="{{site.author.googlescholar}}">google scholar</a></div>
+{% endif %}--->
+
+<!---{% include base_path %}--->
+
+<!-- New style rendering if publication categories are defined -->
+{% if site.publication_category %}
+  {% for category in site.publication_category  %}
+    {% assign title_shown = false %}
+    {% for post in site.publications reversed %}
+      {% if post.category != category[0] %}
+        {% continue %}
+      {% endif %}
+      {% unless title_shown %}
+        <!---<h2>{{ category[1].title }}</h2><hr />--->
+        {% assign title_shown = true %}
+      {% endunless %}
+      {% include archive-single.html %}
+    {% endfor %}
+  {% endfor %}
+{% else %}
+  {% for post in site.publications reversed %}
+    {% include archive-single.html %}
+  {% endfor %}
+{% endif %}
+
+<br><br>
+<h1 style="text-decoration: underline;">Education:</h1>
+
+<ul>
+    <li>March 2024 – present:<br>Ph.D. student in Computer Science at Saarland University (March 2024 – December 2025) → ETH Zürich (January 2026 – present) (Supervisor: <a href="https://people.mpi-inf.mpg.de/~kbringma/">Prof. Karl Bringmann</a>)</li>
+    <li>October 2022 – July 2025:<br>M.Sc. in Computer Science at Saarland University, Saarbrücken, Germany<br>Master's Thesis: <a href="https://arxiv.org/pdf/2303.08612">Combinatorial Designs Meet Hypercliques: Higher Lower Bounds for Klee’s Measure Problem and Related Problems in Dimensions d ≥ 4</a> (Supervisor: <a href="https://act.iti.kit.edu/people/marvinkuennemann">Prof. Marvin Künnemann</a>)</li>
+    <li>September 2018 – July 2022:<br>B.Sc. in Computer Science at Saint Petersburg State University<br>Bachelor's Thesis: <a href="https://peltorator.com/files/bachelors-thesis.pdf">Improving Time Complexities of Segment Tree Beats Algorithms</a> (Supervisor: <a href="https://alexanderskulikov.github.io/">Prof. Alexander S. Kulikov</a>)</li>
+</ul>

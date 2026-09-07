@@ -1,0 +1,21 @@
+name: Release
+
+on:
+  release:
+    types: [published, edited]
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Actions-R-Us/actions-tagger@v2
+        with:
+          publish_latest_tag: true
+
+      - uses: actions/checkout@v6
+
+      - name: Build and publish to pypi
+        uses: JRubics/poetry-publish@v2.1
+        with:
+          pypi_token: ${{ secrets.PYPI_TOKEN }}

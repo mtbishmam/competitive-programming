@@ -1,0 +1,68 @@
+name: test
+
+on:
+  workflow_dispatch:
+    inputs:
+      coverage:
+        required: false
+        default: false
+        type: boolean
+        description: coverage test
+  workflow_call:
+    inputs:
+      coverage:
+        required: false
+        default: false
+        type: boolean
+        description: coverage test
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python:
+          - "3.10"
+          - "3.11"
+          - "3.12"
+          - "3.13"
+          - "3.14"
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up poetry
+        run: pipx install poetry
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "${{ matrix.python }}"
+          cache: "poetry"
+
+      - name: Install dependencies
+        run: poetry install --with test
+
+      - name: Install dependencies (Java)
+        uses: actions/setup-java@v5
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: GNU time
+        if: runner.os == 'macOS'
+        run: brew install gnu-time
+
+      - name: Run test all
+        run: poetry run pytest ${{ inputs.coverage && '-vv --cov=src/ --cov-branch --cov-report=html:coverage' || '' }}
+        env:
+          TZ: Asia/Tokyo
+
+      - name: Upload coverage
+        if: inputs.coverage
+        uses: actions/upload-artifact@v7
+        with:
+          name: pytest-coverage-${{matrix.os}}-py${{matrix.python}}
+          path: |
+            coverage/
+          retention-days: 1

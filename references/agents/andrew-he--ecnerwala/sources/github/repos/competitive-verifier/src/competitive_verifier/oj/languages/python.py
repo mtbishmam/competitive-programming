@@ -1,0 +1,112 @@
+# pyright: reportUnknownVariableType=false, reportUnknownMemberType=false
+# Python Version: 3.x
+import concurrent.futures
+import functools
+import os
+import pathlib
+import platform
+import sys
+from collections.abc import Sequence
+from logging import getLogger
+
+import importlab.environment
+import importlab.fs
+import importlab.graph
+
+from competitive_verifier.models import ShellCommand
+
+from .base import Language, LanguageEnvironment
+
+logger = getLogger(__name__)
+
+
+class PythonLanguageEnvironment(LanguageEnvironment):
+    @property
+    def name(self) -> str:
+        return "Python"
+
+    def _python_path(self, *, basedir: pathlib.Path) -> str:
+        python_path = os.getenv("PYTHONPATH")
+        return (
+            basedir.resolve().as_posix() + os.pathsep + python_path
+            if python_path
+            else basedir.resolve().as_posix()
+        )
+
+    def get_compile_command(
+        self, path: pathlib.Path, *, basedir: pathlib.Path, tempdir: pathlib.Path
+    ) -> ShellCommand:
+        return ShellCommand(
+            command=["python", "-m", "py_compile", str(path)],
+            env={"PYTHONPATH": self._python_path(basedir=basedir)},
+        )
+
+    def get_execute_command(
+        self, path: pathlib.Path, *, basedir: pathlib.Path, tempdir: pathlib.Path
+    ) -> ShellCommand:
+        return ShellCommand(
+            command=["python", str(path)],
+            env={"PYTHONPATH": self._python_path(basedir=basedir)},
+        )
+
+
+@functools.cache
+def _python_list_depending_files(
+    path: pathlib.Path, basedir: pathlib.Path
+) -> list[pathlib.Path]:
+    # compute the dependency graph of the `path`
+    env = importlab.environment.Environment(
+        importlab.fs.Path([importlab.fs.OSFileSystem(str(basedir.resolve()))]),
+        (sys.version_info.major, sys.version_info.minor),
+    )
+    try:
+        executor = concurrent.futures.ThreadPoolExecutor()
+        future = executor.submit(
+            importlab.graph.ImportGraph.create,  # pyright: ignore[reportUnknownArgumentType]
+            env,
+            [str(path)],
+            True,
+        )
+
+        timeout = 5.0 if platform.uname().system == "Windows" else 1.0
+        # 1.0 sec causes timeout on CI using Windows
+
+        res_graph = future.result(timeout=timeout)
+    except concurrent.futures.TimeoutError as e:
+        raise RuntimeError(
+            f"Failed to analyze the dependency graph (timeout): {path}"
+        ) from e
+    try:
+        node_deps_pairs: list[tuple[str, list[str]]] = res_graph.deps_list()
+    except Exception as e:
+        raise RuntimeError(
+            f"Failed to analyze the dependency graph (circular imports?): {path}"
+        ) from e
+    logger.debug("the dependency graph of %s: %s", path, node_deps_pairs)
+
+    # collect Python files which are depended by the `path` and under `basedir`
+    res_deps: list[pathlib.Path] = []
+    res_deps.append(path.resolve())
+    for node_, deps_ in node_deps_pairs:
+        node = pathlib.Path(node_)
+        deps = list(map(pathlib.Path, deps_))
+        if node.resolve() == path.resolve():
+            res_deps.extend(
+                dep.resolve()
+                for dep in deps
+                if basedir.resolve() in dep.resolve().parents
+            )
+            break
+    return list(set(res_deps))
+
+
+class PythonLanguage(Language):
+    def list_dependencies(
+        self, path: pathlib.Path, *, basedir: pathlib.Path
+    ) -> list[pathlib.Path]:
+        return _python_list_depending_files(path.resolve(), basedir)
+
+    def list_environments(
+        self, path: pathlib.Path, *, basedir: pathlib.Path
+    ) -> Sequence[PythonLanguageEnvironment]:
+        return [PythonLanguageEnvironment()]

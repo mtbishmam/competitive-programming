@@ -1,0 +1,816 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Weekly full re-verify: scheduled runs skip the previous-results
+    # restore, so every solution is re-verified from scratch.
+    - cron: '0 5 * * 6'
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ${{ runner.os }}-ccache
+
+      - name: Cache CMake dependencies
+        uses: actions/cache@v6
+        with:
+          path: build/_deps
+          key: ${{ runner.os }}-cmake-deps-${{ hashFiles('CMakeLists.txt') }}
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+
+      # Only the unit tests; the verify solutions are compiled by the
+      # verification jobs below.
+      - name: Build
+        run: cmake --build build -j --target tests
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  bundle-check:
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v7
+
+      # Bundle + minify every src/ header and verify (via clang's raw
+      # lexer) that minification preserves every token.
+      - name: Bundle and check all headers
+        run: scripts/bundle.py --all --check
+
+  setup-verify:
+    runs-on: ubuntu-26.04
+    outputs:
+      testcases-key: testcases-${{ steps.problems-version.outputs.hash }}-${{ steps.problems-set.outputs.hash }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up competitive-verifier
+        uses: competitive-verifier/actions/setup@v2
+        with:
+          # Fork with cp-book integration patches (content-hash skip, docs
+          # coverage integration, bundler include paths); see the branch's
+          # log vs upstream main.
+          package: git+https://github.com/ecnerwala/competitive-verifier.git@cp-book-integration
+          cache-pip: true
+
+      - name: oj-resolve
+        uses: competitive-verifier/actions/oj-resolve@v2
+        with:
+          output-path: verify_files.json
+          include: |
+            src
+            verify
+          exclude: |
+            third_party
+          config: .competitive-verifier/config.toml
+
+      # Second resolve for the coverage environment (its compile commands
+      # differ: --coverage via config-coverage.toml), so coverage-verify
+      # doesn't have to resolve again.
+      - name: oj-resolve (coverage environment)
+        uses: competitive-verifier/actions/oj-resolve@v2
+        with:
+          output-path: verify_files-coverage.json
+          include: |
+            src
+            verify
+          exclude: |
+            third_party
+          config: .competitive-verifier/config-coverage.toml
+
+      - name: Upload verify_files.json
+        uses: competitive-verifier/actions/upload-verify-artifact@v2
+        with:
+          file: verify_files.json
+
+      - name: Upload verify_files-coverage.json
+        uses: actions/upload-artifact@v7
+        with:
+          name: verify_files-coverage
+          path: verify_files-coverage.json
+          retention-days: 1
+
+      - name: Upload bundled
+        uses: actions/upload-artifact@v7
+        with:
+          name: Bundled-${{ runner.os }}
+          path: .competitive-verifier/bundled
+          retention-days: 1
+
+      - name: Get library-checker-problems version
+        id: problems-version
+        run: |
+          echo "hash=$(git ls-remote https://github.com/yosupo06/library-checker-problems HEAD | cut -f1)" >> "$GITHUB_OUTPUT"
+
+      # Key on the set of referenced problem URLs, not solution contents:
+      # cache entries are immutable, so a fresh (multi-GB) entry should only
+      # be saved when the test data can actually differ — a problem is added
+      # or upstream library-checker-problems changes — not on every edit to
+      # a verify solution.
+      - name: Compute problem-set hash
+        id: problems-set
+        run: |
+          echo "hash=$(python3 - <<'EOF'
+          import hashlib, json
+          files = json.load(open("verify_files.json"))["files"]
+          urls = sorted({
+              v["problem"]
+              for f in files.values()
+              for v in f.get("verification", [])
+              if "problem" in v
+          })
+          print(hashlib.sha256("\n".join(urls).encode()).hexdigest())
+          EOF
+          )" >> "$GITHUB_OUTPUT"
+
+      # An exact key hit means the saved entry was fully generated for this
+      # problem set + upstream version, so setup doesn't need the cache
+      # itself (only the shards do): check existence without downloading,
+      # and only restore + generate + save on a miss.
+      - name: Check testcases cache
+        id: testcases-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: .competitive-verifier/cache
+          key: testcases-${{ steps.problems-version.outputs.hash }}-${{ steps.problems-set.outputs.hash }}
+          lookup-only: true
+
+      # Generate all testcases once and save them here; the verify and
+      # coverage-verify shards restore this cache read-only, so every shard
+      # (and both environments) sees identical test data.
+      - name: Restore testcases
+        if: steps.testcases-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/restore@v6
+        with:
+          path: .competitive-verifier/cache
+          key: testcases-${{ steps.problems-version.outputs.hash }}-${{ steps.problems-set.outputs.hash }}
+          restore-keys: |
+            testcases-${{ steps.problems-version.outputs.hash }}-
+            testcases-
+
+      - name: Generate testcases
+        if: steps.testcases-cache.outputs.cache-hit != 'true'
+        run: competitive-verifier download --verify-json verify_files.json
+
+      - name: Save testcases
+        if: steps.testcases-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: .competitive-verifier/cache
+          key: testcases-${{ steps.problems-version.outputs.hash }}-${{ steps.problems-set.outputs.hash }}
+
+      # Snapshot the previous results once and hand them to the shards as an
+      # artifact: all shards then filter against the same previous results,
+      # so the builtin --split sharding partitions the remaining files
+      # consistently (each shard restoring caches itself could race with
+      # concurrent saves and disagree). Scheduled runs skip this so every
+      # solution is re-verified from scratch.
+      - name: Restore previous verify results
+        if: github.event_name != 'schedule'
+        uses: actions/cache/restore@v6
+        with:
+          path: .cv-prev-result
+          key: verify-result-${{ github.ref }}-${{ github.run_id }}
+          restore-keys: |
+            verify-result-${{ github.ref }}-
+            verify-result-refs/heads/master-
+
+      - name: Restore previous coverage results
+        if: github.event_name != 'schedule'
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            coverage-counters
+            .cv-coverage-result
+          key: coverage-counters-${{ github.ref }}-${{ github.run_id }}
+          restore-keys: |
+            coverage-counters-${{ github.ref }}-
+            coverage-counters-refs/heads/master-
+
+      - name: Upload previous verify result
+        if: github.event_name != 'schedule'
+        uses: actions/upload-artifact@v7
+        with:
+          name: prev-verify-result
+          path: .cv-prev-result/result.json
+          if-no-files-found: ignore
+          retention-days: 1
+
+      - name: Upload previous coverage result
+        if: github.event_name != 'schedule'
+        uses: actions/upload-artifact@v7
+        with:
+          name: prev-coverage-result
+          path: .cv-coverage-result/result.json
+          if-no-files-found: ignore
+          retention-days: 1
+
+  verify:
+    runs-on: ubuntu-26.04
+    needs: [setup-verify]
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Download verify_files.json
+        uses: competitive-verifier/actions/download-verify-artifact@v2
+
+      - name: Set up competitive-verifier
+        uses: competitive-verifier/actions/setup@v2
+        with:
+          # Fork with cp-book integration patches (content-hash skip, docs
+          # coverage integration, bundler include paths); see the branch's
+          # log vs upstream main.
+          package: git+https://github.com/ecnerwala/competitive-verifier.git@cp-book-integration
+          cache-pip: true
+
+      # Restore-only: setup-verify owns generating and saving this cache,
+      # and exports the exact key it saved under.
+      - name: Restore testcases
+        uses: actions/cache/restore@v6
+        with:
+          path: .competitive-verifier/cache
+          key: ${{ needs.setup-verify.outputs.testcases-key }}
+          restore-keys: |
+            testcases-
+
+      # continue-on-error: the artifact doesn't exist on scheduled runs or
+      # when setup-verify found no previous results.
+      - name: Download previous result
+        if: github.event_name != 'schedule'
+        continue-on-error: true
+        uses: actions/download-artifact@v7
+        with:
+          name: prev-verify-result
+          path: prev-result
+
+      - name: Check for previous result
+        id: prev-result
+        run: |
+          if test -f prev-result/result.json; then
+            echo "file=prev-result/result.json" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Direct invocation (the verify action has no input for
+      # --prev-result-mode). Hash mode skips solutions whose transitive
+      # sources, verification commands and Library Checker test data are
+      # unchanged; failures surface in the check job like the action's
+      # default check: false. --split shards the post-filter remaining
+      # files across the matrix jobs.
+      - name: Verify
+        run: |
+          competitive-verifier verify --check-error \
+            --timeout 1800 \
+            --prev-result-mode hash \
+            --split '${{ strategy.job-total }}' \
+            --split-index '${{ matrix.shard }}' \
+            ${PREV_RESULT:+--prev-result "$PREV_RESULT"} \
+            --output '${{ runner.temp }}/result.json' || true
+        env:
+          PREV_RESULT: ${{ steps.prev-result.outputs.file }}
+
+      - name: Upload shard result
+        uses: actions/upload-artifact@v7
+        with:
+          name: VerifyResult-shard-${{ matrix.shard }}
+          path: ${{ runner.temp }}/result.json
+          retention-days: 1
+
+  verify-merge:
+    runs-on: ubuntu-26.04
+    needs: [verify]
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up competitive-verifier
+        uses: competitive-verifier/actions/setup@v2
+        with:
+          # Fork with cp-book integration patches (content-hash skip, docs
+          # coverage integration, bundler include paths); see the branch's
+          # log vs upstream main.
+          package: git+https://github.com/ecnerwala/competitive-verifier.git@cp-book-integration
+          cache-pip: true
+
+      - name: Download shard results
+        uses: actions/download-artifact@v7
+        with:
+          pattern: VerifyResult-shard-*
+          path: .shard-results
+
+      # Each shard's result carries fresh (newest: true) entries for the
+      # files it ran plus copies of the previous results for the rest;
+      # merge-result keeps the newest entry per file.
+      - name: Merge shard results
+        run: |
+          competitive-verifier merge-result .shard-results/VerifyResult-shard-*/result.json \
+            > '${{ runner.temp }}/result.json'
+
+      - name: Save results for future runs
+        run: |
+          mkdir -p .cv-prev-result
+          cp "${{ runner.temp }}/result.json" .cv-prev-result/result.json
+
+      - name: Cache results
+        uses: actions/cache/save@v6
+        with:
+          path: .cv-prev-result
+          key: verify-result-${{ github.ref }}-${{ github.run_id }}
+
+      - name: Upload result artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Result-${{ runner.os }}
+          path: ${{ runner.temp }}/result.json
+          retention-days: 1
+
+  coverage-verify:
+    runs-on: ubuntu-26.04
+    needs: [setup-verify]
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up competitive-verifier
+        uses: competitive-verifier/actions/setup@v2
+        with:
+          # Fork with cp-book integration patches (content-hash skip, docs
+          # coverage integration, bundler include paths); see the branch's
+          # log vs upstream main.
+          package: git+https://github.com/ecnerwala/competitive-verifier.git@cp-book-integration
+          cache-pip: true
+
+      - name: Download verify_files-coverage.json
+        uses: actions/download-artifact@v7
+        with:
+          name: verify_files-coverage
+
+      # Restore-only: setup-verify owns generating and saving this cache,
+      # and exports the exact key it saved under.
+      - name: Restore testcases
+        uses: actions/cache/restore@v6
+        with:
+          path: .competitive-verifier/cache
+          key: ${{ needs.setup-verify.outputs.testcases-key }}
+          restore-keys: |
+            testcases-
+
+      # continue-on-error: the artifact doesn't exist on scheduled runs or
+      # when setup-verify found no previous results.
+      - name: Download previous result
+        if: github.event_name != 'schedule'
+        continue-on-error: true
+        uses: actions/download-artifact@v7
+        with:
+          name: prev-coverage-result
+          path: prev-result
+
+      - name: Check for previous result
+        id: prev-result
+        run: |
+          if test -f prev-result/result.json; then
+            echo "file=prev-result/result.json" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run verify solutions with coverage
+        run: |
+          competitive-verifier verify --check-error \
+            --timeout 1800 \
+            --prev-result-mode hash \
+            --split '${{ strategy.job-total }}' \
+            --split-index '${{ matrix.shard }}' \
+            ${PREV_RESULT:+--prev-result "$PREV_RESULT"} \
+            --output '${{ runner.temp }}/coverage-result.json' || true
+        env:
+          PREV_RESULT: ${{ steps.prev-result.outputs.file }}
+          COMPETITIVE_VERIFY_FILES_PATH: verify_files-coverage.json
+
+      # Ship only this shard's freshly written counters (newest: true
+      # entries are the ones this shard actually ran); coverage-verify-merge
+      # overlays them onto the rolling staged-counter cache. Counter paths
+      # are constructed exactly (no globbing): gcc compiling `x.cpp` with
+      # `-o <dir>/a.out` writes `<dir>/a-x.gcno`/`.gcda`, and the binary
+      # dir comes from the manifest's verification command.
+      - name: Collect fresh coverage counters
+        run: |
+          python3 - <<'EOF'
+          import json, pathlib, shutil
+          manifest = json.load(open("verify_files-coverage.json"))["files"]
+          result_files = json.load(open("${{ runner.temp }}/coverage-result.json"))["files"]
+          out = pathlib.Path("shard-out/counters")
+          out.mkdir(parents=True, exist_ok=True)
+          fresh = 0
+          for f, r in result_files.items():
+              if not r.get("newest"):
+                  continue  # skipped via prev-result or run on another shard
+              stem = pathlib.PurePosixPath(f).name.removesuffix(".cpp")
+              for v in manifest.get(f, {}).get("verification", []):
+                  cmd = v.get("command")
+                  if cmd is None:
+                      continue  # const verification (e.g. IGNOREd file), no binary
+                  bindir = pathlib.Path(cmd).parent
+                  for ext in (".gcno", ".gcda"):
+                      p = bindir / f"a-{stem}{ext}"
+                      if p.exists():
+                          shutil.copy2(p, out / p.name)
+                          fresh += 1
+                      else:
+                          print(f"::warning::missing counter file {p}")
+          print(f"collected {fresh} fresh counter files")
+          EOF
+
+      - name: Copy result into shard output
+        run: cp "${{ runner.temp }}/coverage-result.json" shard-out/result.json
+
+      - name: Upload shard output
+        uses: actions/upload-artifact@v7
+        with:
+          name: CoverageShard-${{ matrix.shard }}
+          path: shard-out
+          retention-days: 1
+
+  coverage-verify-merge:
+    runs-on: ubuntu-26.04
+    needs: [coverage-verify]
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up competitive-verifier
+        uses: competitive-verifier/actions/setup@v2
+        with:
+          # Fork with cp-book integration patches (content-hash skip, docs
+          # coverage integration, bundler include paths); see the branch's
+          # log vs upstream main.
+          package: git+https://github.com/ecnerwala/competitive-verifier.git@cp-book-integration
+          cache-pip: true
+
+      # Slim rolling cache: only the staged counters of the previous run
+      # plus the result.json used to skip unchanged solutions (a few MB).
+      # Skipped solutions keep their previously staged counters; re-run
+      # solutions get fresh ones from the shard artifacts.
+      - name: Restore coverage counters
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            coverage-counters
+            .cv-coverage-result
+          key: coverage-counters-${{ github.ref }}-${{ github.run_id }}
+          restore-keys: |
+            coverage-counters-${{ github.ref }}-
+            coverage-counters-refs/heads/master-
+
+      - name: Download verify_files-coverage.json
+        uses: actions/download-artifact@v7
+        with:
+          name: verify_files-coverage
+
+      - name: Download shard outputs
+        uses: actions/download-artifact@v7
+        with:
+          pattern: CoverageShard-*
+          path: .shards
+
+      # Each shard's result carries fresh (newest: true) entries for the
+      # files it ran plus copies of the previous results for the rest;
+      # merge-result keeps the newest entry per file.
+      - name: Merge shard results
+        run: |
+          competitive-verifier merge-result .shards/CoverageShard-*/result.json \
+            > '${{ runner.temp }}/coverage-result.json'
+
+      # Opt-in counter selection: stage only the .gcno/.gcda of solutions in
+      # the merged result, so stale counters (from removed or renamed files)
+      # can't leak into the report. Fresh shard counters win; solutions
+      # skipped via prev-result keep their restored staged counters. Staged
+      # files not in the current result are pruned.
+      - name: Stage coverage counters
+        run: |
+          python3 - <<'EOF'
+          import json, pathlib, shutil
+          manifest = json.load(open("verify_files-coverage.json"))["files"]
+          result_files = json.load(open("${{ runner.temp }}/coverage-result.json"))["files"]
+          stage = pathlib.Path("coverage-counters")
+          stage.mkdir(exist_ok=True)
+          fresh_names: set[str] = set()
+          for p in sorted(pathlib.Path(".shards").glob("CoverageShard-*/counters/*")):
+              shutil.copy2(p, stage / p.name)
+              fresh_names.add(p.name)
+          kept = 0
+          expected: set[str] = set()
+          for f in result_files:
+              stem = pathlib.PurePosixPath(f).name.removesuffix(".cpp")
+              for v in manifest.get(f, {}).get("verification", []):
+                  if "command" not in v:
+                      continue  # const verification (e.g. IGNOREd file), no binary
+                  for ext in (".gcno", ".gcda"):
+                      name = f"a-{stem}{ext}"
+                      expected.add(name)
+                      if name in fresh_names:
+                          continue
+                      if (stage / name).exists():
+                          kept += 1
+                      else:
+                          print(f"::warning::missing counter file {name}")
+          for p in stage.iterdir():
+              if p.name not in expected:
+                  p.unlink()
+          print(f"staged {len(fresh_names)} fresh + {kept} kept counter files")
+          EOF
+
+      - name: Save results for future runs
+        run: |
+          mkdir -p .cv-coverage-result
+          cp "${{ runner.temp }}/coverage-result.json" .cv-coverage-result/result.json
+
+      - name: Save coverage counters
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            coverage-counters
+            .cv-coverage-result
+          key: coverage-counters-${{ github.ref }}-${{ github.run_id }}
+
+      - name: Install gcovr
+        run: pipx install gcovr
+
+      - name: Generate coverage tracefile
+        run: |
+          gcovr --root . --filter 'src/' --exclude '.*\.test\.(cpp|hpp)' \
+            --gcov-ignore-parse-errors suspicious_hits.warn_once_per_file \
+            --exclude-lines-by-pattern '.*assert\(false\).*' \
+            --exclude-branches-by-pattern '.*\bassert\(.*' \
+            --exclude-throw-branches --exclude-noncode-lines \
+            --json ${{ runner.temp }}/coverage-verify.json \
+            coverage-counters
+
+      - name: Upload coverage tracefile
+        uses: actions/upload-artifact@v7
+        with:
+          name: CoverageTrace-verify
+          path: ${{ runner.temp }}/coverage-verify.json
+          retention-days: 1
+
+  coverage-unit-tests:
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ${{ runner.os }}-ccache-coverage
+
+      - name: Cache CMake dependencies
+        uses: actions/cache@v6
+        with:
+          path: build/_deps
+          key: ${{ runner.os }}-cmake-deps-${{ hashFiles('CMakeLists.txt') }}
+
+      - name: Build and run unit tests with coverage
+        run: |
+          cmake -B build -DENABLE_COVERAGE=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          cmake --build build -j --target tests
+          ctest --test-dir build --output-on-failure
+
+      # Never-run instrumented stubs so untouched headers appear in coverage
+      # denominators as 0% instead of being invisible (uninstantiated
+      # templates emit no code even here; coverage_fill_missing.py fills
+      # those in later).
+      - name: Instrument untouched headers
+        run: |
+          mkdir -p coverage-stubs
+          for h in $(cd src && find . -name '*.hpp' ! -name '*.test.hpp' | sed 's|^\./||'); do
+            stub="coverage-stubs/$(echo "$h" | tr '/' '_').cpp"
+            echo "#include \"$h\"" > "$stub"
+            ccache g++ --coverage -O0 -fkeep-inline-functions -std=c++23 -I src \
+              -c "$stub" -o "${stub%.cpp}.o" &
+          done
+          wait
+
+      - name: Install gcovr
+        run: pipx install gcovr
+
+      - name: Generate coverage tracefile
+        run: |
+          gcovr --root . --filter 'src/' --exclude '.*\.test\.(cpp|hpp)' \
+            --gcov-ignore-parse-errors suspicious_hits.warn_once_per_file \
+            --exclude-lines-by-pattern '.*assert\(false\).*' \
+            --exclude-branches-by-pattern '.*\bassert\(.*' \
+            --exclude-throw-branches --exclude-noncode-lines \
+            --json ${{ runner.temp }}/coverage-unit-tests.json \
+            build coverage-stubs
+
+      - name: Upload coverage tracefile
+        uses: actions/upload-artifact@v7
+        with:
+          name: CoverageTrace-unit-tests
+          path: ${{ runner.temp }}/coverage-unit-tests.json
+          retention-days: 1
+
+  docs:
+    runs-on: ubuntu-26.04
+    needs: [verify-merge, coverage-verify-merge, coverage-unit-tests]
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      pull-requests: write
+    outputs:
+      upload-pages: ${{ steps.upload-pages.outcome == 'success' }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Download verify_files.json and all artifacts
+        id: all-artifacts
+        uses: competitive-verifier/actions/download-verify-artifact@v2
+        with:
+          download-all: true
+          artifact-root: .artifacts/
+
+      - name: Extract bundled
+        shell: bash
+        run: |
+          rm -rf .competitive-verifier/bundled
+          if test -d "$SRCDIR"; then
+            mkdir -p .competitive-verifier/
+            mv "$SRCDIR" .competitive-verifier/bundled
+          else
+            echo "$SRCDIR does not exist."
+          fi
+        env:
+          SRCDIR: .artifacts/Bundled-${{ runner.os }}
+
+      - name: Set up competitive-verifier
+        uses: competitive-verifier/actions/setup@v2
+        with:
+          # Fork with cp-book integration patches (content-hash skip, docs
+          # coverage integration, bundler include paths); see the branch's
+          # log vs upstream main.
+          package: git+https://github.com/ecnerwala/competitive-verifier.git@cp-book-integration
+          cache-pip: true
+
+      - name: Install gcovr
+        run: pipx install gcovr
+
+      - name: Install tree-sitter
+        run: pip install tree_sitter tree_sitter_cpp
+
+      - name: Merge coverage reports
+        run: |
+          mkdir -p coverage
+          gcovr --root . \
+            --add-tracefile '${{ steps.all-artifacts.outputs.artifacts-root }}/CoverageTrace-*/coverage-*.json' \
+            --json coverage/coverage.json
+
+      # Code absent from the gcov data (uninstantiated templates emit no code
+      # even in the instrumented stubs) gets zero-coverage entries — both
+      # whole template-only headers and individual uninstantiated functions —
+      # so it counts as uncovered instead of being omitted. All reports below
+      # (docs, HTML, summary, badge) include these filled lines.
+      - name: Add uncovered code to coverage.json
+        run: python3 scripts/coverage_fill_missing.py coverage/coverage.json
+
+      - name: Generate coverage reports
+        run: |
+          gcovr --root . \
+            --add-tracefile coverage/coverage.json \
+            --html-details coverage/index.html \
+            --cobertura coverage/coverage.xml \
+            --markdown-summary coverage/summary.md \
+            --json-summary coverage/summary.json \
+            --print-summary
+          cat coverage/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      # Run the docs CLI directly (rather than competitive-verifier/actions/docs)
+      # to pass --coverage-json, which renders per-page coverage summaries and
+      # a per-line coverage tab.
+      - name: Docs
+        run: |
+          competitive-verifier docs \
+            ${{ steps.all-artifacts.outputs.artifacts-root }}/Result-*/result.json \
+            --coverage-json coverage/coverage.json \
+            --write-summary \
+            --destination _jekyll
+
+      # The front page (docs/index.md) renders the README via include_relative.
+      - name: Copy README into docs
+        run: cp README.md _jekyll/README.md
+
+      # Map source files to their gcovr details pages so doc pages can link
+      # to per-file coverage reports.
+      - name: Link coverage pages
+        run: python3 scripts/coverage_page_links.py --coverage-dir coverage --jekyll-dir _jekyll
+
+      - name: Write coverage badge
+        run: |
+          python3 - <<'EOF'
+          import json
+          s = json.load(open("coverage/summary.json"))
+          pct = s["line_percent"]
+          color = "brightgreen" if pct >= 90 else "green" if pct >= 75 else "yellow" if pct >= 50 else "red"
+          json.dump({
+              "schemaVersion": 1,
+              "label": "coverage",
+              "message": f"{pct:.1f}%",
+              "color": color,
+          }, open("coverage/badge.json", "w"))
+          EOF
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v6
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: _jekyll
+          destination: _site
+
+      - name: Add coverage report to site
+        run: sudo cp -r coverage _site/coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v7
+        with:
+          name: Coverage-${{ runner.os }}
+          path: coverage/
+          retention-days: 7
+
+      - name: Comment coverage on PR
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v3
+        with:
+          header: coverage
+          path: coverage/summary.md
+
+      - name: Upload artifact
+        id: upload-pages
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  # Turns verification failures into a red job. Separate from docs so a
+  # failing solution doesn't abort the docs/pages build.
+  verify-check:
+    runs-on: ubuntu-26.04
+    needs: [verify-merge]
+    steps:
+      - name: Set up competitive-verifier
+        uses: competitive-verifier/actions/setup@v2
+        with:
+          # Fork with cp-book integration patches (content-hash skip, docs
+          # coverage integration, bundler include paths); see the branch's
+          # log vs upstream main.
+          package: git+https://github.com/ecnerwala/competitive-verifier.git@cp-book-integration
+          cache-pip: true
+
+      - name: Download result
+        uses: actions/download-artifact@v7
+        with:
+          name: Result-${{ runner.os }}
+          path: .result
+
+      - name: Check
+        uses: competitive-verifier/actions/check@v2
+        with:
+          verify-result: .result/result.json
+
+  deploy-docs:
+    if: (success() || failure()) && github.ref == 'refs/heads/master' && needs.docs.outputs.upload-pages == 'true'
+    needs: docs
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

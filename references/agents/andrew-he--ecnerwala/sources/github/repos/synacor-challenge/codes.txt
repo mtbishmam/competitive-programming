@@ -1,0 +1,8 @@
+BTIusRvheIiH  # arch-spec
+omOdvXeQsntd  # challenge.bin
+MKwBjhCceLVr  # self-test
+SDejwHYBcpaR  # tablet
+aiEbrVscqNRb  # maze (West-South-North)
+poCIXNvCICFD  # teleporter
+icFTVSIGbRHs  # post-teleporter
+vxUwbwbYVvAU  # FINAL VAULT

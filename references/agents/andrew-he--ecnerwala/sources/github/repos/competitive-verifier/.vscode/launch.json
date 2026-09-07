@@ -1,0 +1,60 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "app.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/competitive_verifier/app.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "oj-resolve",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/competitive_verifier/app.py",
+            "args": [
+                "oj-resolve",
+                "--include",
+                "examples",
+                "--config",
+                "examples/config.toml"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "verify",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/competitive_verifier/app.py",
+            "args": [
+                "verify",
+                "--output",
+                ".competitive-verifier/tmp/all-result.json"
+            ],
+            "env": {
+                "COMPETITIVE_VERIFY_FILES_PATH": ".competitive-verifier/tmp/all-verify_files.json"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "docs",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/competitive_verifier/app.py",
+            "args": [
+                "docs",
+                ".competitive-verifier/tmp/all-result.json",
+                "--include",
+                "examples/"
+            ],
+            "env": {
+                "COMPETITIVE_VERIFY_FILES_PATH": ".competitive-verifier/tmp/all-verify_files.json"
+            },
+            "console": "integratedTerminal"
+        },
+    ]
+}

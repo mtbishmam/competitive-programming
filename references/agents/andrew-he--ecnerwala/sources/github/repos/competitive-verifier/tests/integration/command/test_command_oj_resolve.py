@@ -1,0 +1,482 @@
+import json
+from typing import Protocol
+
+import pytest
+from pytest_mock import MockerFixture
+
+from competitive_verifier import app
+from competitive_verifier.oj.languages import special_comments
+
+from .data.integration_data import IntegrationData
+from .types import FilePaths
+
+
+@pytest.fixture
+def setenv_resolve(mocker: MockerFixture):
+    special_comments.list_special_comments.cache_clear()
+    special_comments.list_embedded_urls.cache_clear()
+
+
+class _ArgsFunc(Protocol):
+    def __call__(
+        self,
+        *,
+        bundle: bool = True,
+        include: list[str] | None = None,
+        exclude: list[str] | None = None,
+        config: str | None = None,
+    ) -> list[str]: ...
+
+
+@pytest.fixture
+def make_args() -> _ArgsFunc:
+    def _make_args(
+        *,
+        bundle: bool = False,
+        include: list[str] | None = None,
+        exclude: list[str] | None = None,
+        config: str | None = None,
+    ) -> list[str]:
+        args: list[str] = ["oj-resolve"]
+        if not bundle:
+            args.append("--no-bundle")
+        if include is not None:
+            args.append("--include")
+            args.extend(include)
+        if exclude is not None:
+            args.append("--exclude")
+            args.extend(exclude)
+        if config is not None:
+            args.append("--config")
+            args.append(config)
+        return args
+
+    return _make_args
+
+
+@pytest.mark.integration
+@pytest.mark.usefixtures("additional_path")
+@pytest.mark.order(-1000)
+class TestCommandOjResolve:
+    @pytest.mark.usefixtures("setenv_resolve")
+    def test_oj_resolve_by_lang_data(
+        self,
+        make_args: _ArgsFunc,
+        integration_data: IntegrationData,
+        capfd: pytest.CaptureFixture[str],
+    ):
+        expected = integration_data.expected_verify_json()
+        args = make_args(
+            include=integration_data.include_path,
+            exclude=integration_data.exclude_path,
+            config=integration_data.config_path,
+            bundle=True,
+        )
+        parsed = app.ArgumentParser().parse(args)
+        assert isinstance(parsed, app.OjResolve)
+        assert parsed.run()
+
+        stdout = capfd.readouterr().out
+        resolved = json.loads(stdout)
+        assert resolved == expected
+
+        verify = integration_data.config_dir_path / "verify.json"
+        verify.parent.mkdir(parents=True, exist_ok=True)
+        verify.write_text(stdout, encoding="utf-8")
+
+        integration_data.assert_oj_resolve()
+
+    @pytest.mark.usefixtures("setenv_resolve")
+    def test_without_include_exclude(
+        self,
+        make_args: _ArgsFunc,
+        monkeypatch: pytest.MonkeyPatch,
+        file_paths: FilePaths,
+        capfd: pytest.CaptureFixture[str],
+    ):
+        monkeypatch.chdir(file_paths.root / "IncludeExclude")
+        args = make_args(
+            config="config.toml",
+            bundle=True,
+        )
+        parsed = app.ArgumentParser().parse(args)
+        assert isinstance(parsed, app.OjResolve)
+        assert parsed.run()
+
+        stdout = capfd.readouterr().out
+        resolved = json.loads(stdout)
+        assert resolved == {
+            "files": {
+                "a1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["a1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "a2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["a2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "b1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["b1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "b2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["b2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "c1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["c1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "c2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["c2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/a1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/a1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/a2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/a2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/b1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/b1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/b2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/b2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/c1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/c1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/c2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/c2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+            },
+        }
+
+    @pytest.mark.parametrize("bundle", [True, False])
+    @pytest.mark.usefixtures("setenv_resolve")
+    def test_with_include1(
+        self,
+        make_args: _ArgsFunc,
+        monkeypatch: pytest.MonkeyPatch,
+        file_paths: FilePaths,
+        capfd: pytest.CaptureFixture[str],
+        bundle: bool,
+    ):
+        monkeypatch.chdir(file_paths.root / "IncludeExclude")
+        args = make_args(
+            include=["subdir/"],
+            config="config.toml",
+            bundle=bundle,
+        )
+        parsed = app.ArgumentParser().parse(args)
+        assert isinstance(parsed, app.OjResolve)
+        assert parsed.run()
+
+        stdout = capfd.readouterr().out
+        resolved = json.loads(stdout)
+        assert resolved == {
+            "files": {
+                "subdir/a1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/a1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/a2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/a2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/b1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/b1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/b2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/b2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/c1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/c1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/c2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/c2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+            },
+        }
+
+    @pytest.mark.usefixtures("setenv_resolve")
+    def test_with_include2(
+        self,
+        make_args: _ArgsFunc,
+        monkeypatch: pytest.MonkeyPatch,
+        file_paths: FilePaths,
+        capfd: pytest.CaptureFixture[str],
+    ):
+        monkeypatch.chdir(file_paths.root / "IncludeExclude")
+        args = make_args(
+            include=["**a*.txt"],
+            config="config.toml",
+            bundle=True,
+        )
+        parsed = app.ArgumentParser().parse(args)
+        assert isinstance(parsed, app.OjResolve)
+        assert parsed.run()
+
+        stdout = capfd.readouterr().out
+        resolved = json.loads(stdout)
+        assert resolved == {
+            "files": {
+                "a1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["a1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "a2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["a2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/a1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/a1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/a2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/a2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+            },
+        }
+
+    @pytest.mark.usefixtures("setenv_resolve")
+    def test_with_exclude1(
+        self,
+        make_args: _ArgsFunc,
+        monkeypatch: pytest.MonkeyPatch,
+        file_paths: FilePaths,
+        capfd: pytest.CaptureFixture[str],
+    ):
+        monkeypatch.chdir(file_paths.root / "IncludeExclude")
+        args = make_args(
+            exclude=["subdir/"],
+            config="config.toml",
+            bundle=True,
+        )
+        parsed = app.ArgumentParser().parse(args)
+        assert isinstance(parsed, app.OjResolve)
+        assert parsed.run()
+
+        stdout = capfd.readouterr().out
+        resolved = json.loads(stdout)
+        assert resolved == {
+            "files": {
+                "a1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["a1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "a2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["a2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "b1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["b1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "b2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["b2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "c1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["c1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "c2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["c2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+            },
+        }
+
+    @pytest.mark.usefixtures("setenv_resolve")
+    def test_with_exclude2(
+        self,
+        make_args: _ArgsFunc,
+        monkeypatch: pytest.MonkeyPatch,
+        file_paths: FilePaths,
+        capfd: pytest.CaptureFixture[str],
+    ):
+        monkeypatch.chdir(file_paths.root / "IncludeExclude")
+        args = make_args(
+            exclude=["a*.txt", "b*.txt"],
+            config="config.toml",
+            bundle=True,
+        )
+        parsed = app.ArgumentParser().parse(args)
+        assert isinstance(parsed, app.OjResolve)
+        assert parsed.run()
+
+        stdout = capfd.readouterr().out
+        resolved = json.loads(stdout)
+        assert resolved == {
+            "files": {
+                "c1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["c1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "c2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["c2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/a1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/a1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/a2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/a2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/b1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/b1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/b2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/b2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/c1.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/c1.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+                "subdir/c2.txt": {
+                    "additonal_sources": [],
+                    "dependencies": ["subdir/c2.txt"],
+                    "document_attributes": {},
+                    "verification": [],
+                },
+            },
+        }
+
+    @pytest.mark.usefixtures("setenv_resolve")
+    def test_cpp_no_macros(
+        self,
+        make_args: _ArgsFunc,
+        monkeypatch: pytest.MonkeyPatch,
+        file_paths: FilePaths,
+        capfd: pytest.CaptureFixture[str],
+    ):
+        monkeypatch.chdir(file_paths.root / "CppData")
+        args = make_args(
+            config="config_no_macros.toml",
+        )
+        parsed = app.ArgumentParser().parse(args)
+        assert isinstance(parsed, app.OjResolve)
+        assert parsed.run()
+
+        stdout = capfd.readouterr().out
+        resolved = json.loads(stdout)
+        assert resolved == {
+            "files": {
+                "aplusb.hpp": {
+                    "additonal_sources": [],
+                    "dependencies": ["aplusb.hpp"],
+                    "document_attributes": {"links": []},
+                    "verification": [],
+                },
+                "aplusb.main.cpp": {
+                    "additonal_sources": [],
+                    "dependencies": ["aplusb.hpp", "aplusb.main.cpp"],
+                    "document_attributes": {"links": []},
+                    "verification": [],
+                },
+                "aplusb.test.cpp": {
+                    "additonal_sources": [],
+                    "dependencies": ["aplusb.hpp", "aplusb.test.cpp", "macros.hpp"],
+                    "document_attributes": {
+                        "links": ["https://judge.yosupo.jp/problem/aplusb"],
+                    },
+                    "verification": [],
+                },
+                "macros.hpp": {
+                    "additonal_sources": [],
+                    "dependencies": ["macros.hpp"],
+                    "document_attributes": {
+                        "links": [],
+                        "EXTRA_ATTR": "",
+                        "EXTRA_ATTR_VAL": "text",
+                    },
+                    "verification": [],
+                },
+            },
+        }

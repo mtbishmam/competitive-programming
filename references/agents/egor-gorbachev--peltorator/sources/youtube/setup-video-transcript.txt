@@ -1,0 +1,1233 @@
+Title: My Competitive Programming Setup
+
+(0:00) hello  everybody  today  as  some  of  you
+
+(0:02) asked  me  multiple  times
+
+(0:04) i  will  be  talking  about  my  competitive
+
+(0:06) programming  setup
+
+(0:08) i  will  be  talking  about  hardware  about
+
+(0:11) my
+
+(0:12) google  chrome  extensions  for  code  forces
+
+(0:14) about  my  vim  setup  about  my  c-plus  plus
+
+(0:17) setup
+
+(0:18) and  so  on  if  you  are  interested  in
+
+(0:20) something  specific
+
+(0:22) you  may  want  to  check  the  chapters  on
+
+(0:24) the  timeline  of  this  video
+
+(0:26) or  you  can  click  on  the  timestamps  in
+
+(0:29) the  description
+
+(0:30) also  if  you  have  any  questions  please
+
+(0:33) first  check  out  the  description  of  this
+
+(0:35) video  because  i  will  leave
+
+(0:37) all  the  links  to  everything  i  will  be
+
+(0:39) talking  about
+
+(0:41) there  but  if  you  still  have  any
+
+(0:43) questions
+
+(0:44) don't  hesitate  to  ask  them  in  the
+
+(0:47) comment  section
+
+(0:48) so  let's  go  so  in  the  first  part  of  this
+
+(0:52) video
+
+(0:52) i'll  talk  about  my  hardware  let's  start
+
+(0:55) with  my  laptop
+
+(0:56) my  previous  computer  was  really  old
+
+(1:00) and  i  wanted  to  replace  it  for  a  long
+
+(1:02) time  and  when  i  started  this  channel
+
+(1:04) i  realized  that  it's  really  hard  to  make
+
+(1:07) videos  on  an  old  computer
+
+(1:09) so  i  finally  bought  a  new  one  and  now  i
+
+(1:13) have  my  weight
+
+(1:14) 2020  macbook  air  with  m1  chip
+
+(1:19) 60  gigs  of  unified  memory  512  gigs  of
+
+(1:23) ssd
+
+(1:24) and  i  prefer  macbook  air  not
+
+(1:28) macbook  pro  because  i  really  don't  like
+
+(1:30) this  touch  bar
+
+(1:32) and  also  i  prefer  13  inch  displays
+
+(1:35) because  i  don't  like  huge  and  heavy
+
+(1:38) computers
+
+(1:39) so  here  it  is  i'll  leave  the  link
+
+(1:42) in  the  description  you  can  check  it  out
+
+(1:45) as  a  microphone
+
+(1:47) for  these  videos  i  use  my  blue  yeti
+
+(1:51) actually  i  have  it  right  here
+
+(1:54) here  it  is  i'm  not  really  into
+
+(1:57) sound  production  but  it  works  it  works
+
+(2:00) fine
+
+(2:01) and  i  don't  know  what  to  say  when  i  need
+
+(2:03) to
+
+(2:04) draw  something  during  screencasts  i  use
+
+(2:06) my  one  by  wacom
+
+(2:08) tablet  here  it  is  and  here's  the  pencil
+
+(2:12) and  it's  great  but  i  have  one  issue  with
+
+(2:16) it
+
+(2:16) it's  one  of  the  more  cheap  ones  and
+
+(2:19) as  you  can  see  this  pencil  is  plastic
+
+(2:23) and  i've  used  another  one  which  had
+
+(2:26) a  metal  pencil  it  was  the  more  expensive
+
+(2:29) one
+
+(2:30) and  that  pencil  was  much  better  so  if
+
+(2:33) you  have  enough  money
+
+(2:34) i  would  recommend  you  to  buy  a  better
+
+(2:37) version
+
+(2:38) of  this  tablet  generally  i  don't  have
+
+(2:41) any  external  monitors
+
+(2:42) but  right  now  i'm  on  my  summer
+
+(2:45) internship  so  i  have  one
+
+(2:46) you  can  see  right  here  how  my  setup
+
+(2:49) works  right  now
+
+(2:50) i  hope  it  will  help  me  with  my  streams
+
+(2:53) and
+
+(2:54) i  will  leave  a  link  to  it  in  the
+
+(2:55) description  of  this  video  in  the  second
+
+(2:57) part  of  this  video
+
+(2:58) i  will  talk  about  just  small  things  that
+
+(3:01) i  use
+
+(3:02) first  of  them  is  a  program  that  i  use
+
+(3:05) when  i
+
+(3:06) draw  with  my  tablet  it's  called
+
+(3:10) sketchbook  by  autodesk  um
+
+(3:13) i've  used  a  couple  of  these  and  i  think
+
+(3:16) that  this  is  the  best  for  me
+
+(3:19) and  as  you  could  see  in  my  screencasts
+
+(3:23) i  draw  here  a  lot  and  it  really  helps  me
+
+(3:27) now  let's  move  on  to  things  that  i  use
+
+(3:30) specifically  for  competitive  programming
+
+(3:32) and  we  will  start  with  two  google  chrome
+
+(3:35) extensions
+
+(3:36) that  i  use  for  code  forces  first  of  them
+
+(3:39) is  code  cf  predictor
+
+(3:43) and  it  just  adds  this  nice  column  to  the
+
+(3:46) standings
+
+(3:48) where  you  can  see  rating  gains  and
+
+(3:50) losses  during  the  contest
+
+(3:52) of  course  they  are  predicted  so  they  may
+
+(3:55) be
+
+(3:55) not  right  but  they  give  you  some
+
+(3:58) understanding  of  what's  going  on
+
+(4:00) i  should  mention  that  it  updates  not
+
+(4:03) that  fast
+
+(4:04) so  if  you  solved  a  problem  it  won't
+
+(4:07) update
+
+(4:08) right  away  you  should  wait  like  five
+
+(4:11) three  minutes
+
+(4:11) and  then  it  will  update  so  the  second
+
+(4:15) one
+
+(4:15) is  called  code  forces  enhancer  let's  go
+
+(4:18) to  the  settings  to  see
+
+(4:20) what  it  does  there  are  four  options
+
+(4:23) first  one  is  enable  height  soft  problems
+
+(4:25) button
+
+(4:26) if  we  go  to  bugaboo  set  you  can  see
+
+(4:30) that  i  solved  some  problems  here  but
+
+(4:33) there  is  this  show  oh  no
+
+(4:36) height  solved  problems  button  and  if  i
+
+(4:39) click  it
+
+(4:41) these  problems  that  i  solved  will
+
+(4:43) disappear  and  now
+
+(4:44) i  can  easily  solve  all  the  problems  on
+
+(4:47) code  forces
+
+(4:48) the  second  button  is  enable  standings
+
+(4:51) colorizing
+
+(4:53) if  we  enable  it  and  update  page
+
+(4:56) we'll  see  that  now  there  are  these
+
+(4:58) different
+
+(4:59) colors  for  different
+
+(5:03) programming  languages  and  for  each
+
+(5:06) submission  of
+
+(5:08) each  participant  we  can  see  which
+
+(5:11) uh  language  did  they  use  as  you  can  see
+
+(5:15) pretty  much
+
+(5:15) everyone  uses  c  plus  plus  some  people
+
+(5:18) use  java  or
+
+(5:19) python  but  i  don't  really  use  this
+
+(5:22) feature  because
+
+(5:23) when  we  go  to  the  room  where  we  want  to
+
+(5:25) hack  people
+
+(5:26) we'll  see  all  these  different  colors  but
+
+(5:29) i  don't  want  to  see  it  let's  update  a
+
+(5:32) page
+
+(5:33) because  when  i'm  in  the  room  i  want  to
+
+(5:35) see  these
+
+(5:36) yellow  and  red  colors
+
+(5:39) which  indicate  which  submission  i've
+
+(5:42) already  checked
+
+(5:43) so  the  third  thing  is  show  number  of
+
+(5:47) incorrect  attempts  in  standings
+
+(5:49) if  we  go  to  the  standings  we  can  see
+
+(5:51) this  little  number  here
+
+(5:53) so  for  example  this  person  had  two
+
+(5:56) incorrect  submissions  for  problem  f
+
+(5:59) and  the  last  one  is  enable  multiple
+
+(6:01) rating  graphs
+
+(6:03) display  so  if  you  go  here  as  you  can  see
+
+(6:06) it  doesn't  work
+
+(6:08) i  think  it's  because  code  forces  updated
+
+(6:11) this
+
+(6:11) graph  thing  initially  i
+
+(6:14) downloaded  this  extension  for  this
+
+(6:17) multiple  graph  thing  but
+
+(6:18) it  doesn't  work  anymore  so  basically  i
+
+(6:21) use  it  now  only  for  this  little  number
+
+(6:24) over  here
+
+(6:25) i  will  leave  links  to  the  extensions  in
+
+(6:28) the  description
+
+(6:29) so  you  can  download  it  check  them  and  i
+
+(6:32) believe
+
+(6:32) you  will  like  them
+
+(6:36) in  the  third  part  of  this  video  let's
+
+(6:39) talk  about
+
+(6:40) my  theme  setup  especially  i  use
+
+(6:43) macvim  because  i  think  it's  more
+
+(6:46) user-friendly  and  it's
+
+(6:48) cool  to  have  a  separate  program  that  you
+
+(6:51) enter  and  you  can  write  your  code
+
+(6:53) i  should  make  a  disclaimer  that  i
+
+(6:57) personally  use
+
+(6:58) vim  and  i  don't  like  any  ids
+
+(7:02) actually  i  write  all  my  code  in  them  and
+
+(7:05) basically  i  manage  all  my  text  files  in
+
+(7:08) vim
+
+(7:09) but  some  people  like  ids  some  people
+
+(7:12) like
+
+(7:13) different  things  you  don't  need  to  just
+
+(7:17) see  that  i  use  vim  and  then  run  and
+
+(7:20) install  vim
+
+(7:21) try  to  learn  it  and  stuff  maybe  it's
+
+(7:24) just  not  for  you
+
+(7:25) a  lot  of  people  like  ids  ids  are  great
+
+(7:29) they  are  just  not  for  me  so  i  recommend
+
+(7:32) you  to  watch  this
+
+(7:33) see  what  i'm  doing  with  my  vim  if  you're
+
+(7:36) interested
+
+(7:36) you  may  want  to  try  it  then  when  you  try
+
+(7:40) different  variants  you  may  choose
+
+(7:43) the  one  that  works  for  you  but
+
+(7:46) don't  run  and  use  veeam  right  away
+
+(7:50) so  here's  my  macovin  let's  go  to  the
+
+(7:53) most  important  file
+
+(7:54) vmrc  where  my  vim
+
+(7:58) setup  is  i  use
+
+(8:01) color  scheme  named  jelly  beans  i  will
+
+(8:04) leave  a link  in  the  description
+
+(8:05) then  there  are  different  functional
+
+(8:09) buttons
+
+(8:09) for  example  if  i  press  f1
+
+(8:13) i  go  to  the  previous  tab  f3  compiles
+
+(8:18) [Music]
+
+(8:19) f7  is  for  python  there  are  some
+
+(8:22) commented  that  i  used
+
+(8:23) in  the  used  before  don't  use  anymore
+
+(8:27) here  is  my  the  most  important  is  this
+
+(8:30) when  i  press  f10
+
+(8:32) i  compile  and  run  my  cpp  file
+
+(8:36) so  it  compiles  it  g  plus  plus  with
+
+(8:40) sanitizer
+
+(8:41) c  plus  plus  17  it  uses
+
+(8:45) some  uh  minus  ws
+
+(8:49) for  warnings  also  it  defines  on  pc
+
+(8:54) minus  o2  optimization  and  also  it  uses
+
+(8:58) file  named  inp  as  my  input  file
+
+(9:02) so  i  don't  need  to  write
+
+(9:06) input  of  the  problem  every  time
+
+(9:10) also  there  is  f9  which  is  just  the  same
+
+(9:13) but
+
+(9:13) it  doesn't  use  input  file  for  example  if
+
+(9:16) it's
+
+(9:17) some  kind  of  interactive  problem  and
+
+(9:19) there  is  also  f8
+
+(9:21) and  the  different  is  that  it  doesn't  use
+
+(9:23) this  warnings
+
+(9:25) for  example  if  i  take  some  code  from
+
+(9:28) internet
+
+(9:29) and  it's  not  really  great  but  i  don't
+
+(9:32) want  to  rewrite  it  during  the  contest
+
+(9:34) it  may  have  a  lot  of  warnings  i  didn't
+
+(9:36) want  to  see  him  anymore
+
+(9:38) so  i  use  f8  then  there  is
+
+(9:41) this  thing  if  you
+
+(9:44) press  percent  in  vim  it  will
+
+(9:47) go  from  the  top  of  the  block  to  the
+
+(9:49) bottom  and
+
+(9:51) from  the  bottom  to  the  top  but  i  use  tab
+
+(9:53) for  this
+
+(9:54) so  let's  see  if  we  have  some  code
+
+(9:58) and  we  have  this  block
+
+(10:02) of  this  brace  and  this  brace  so  now  i'm
+
+(10:05) standing  here  and  if  i
+
+(10:07) uh  press  tab  it  will  jump  here
+
+(10:10) and  the  seam  from  the  button  so  if  we
+
+(10:14) want  to  go  to  the  top  of  the  block
+
+(10:16) from  the  button  it's  a  good  thing
+
+(10:20) then  i  have  my  plugins  we'll  talk  about
+
+(10:23) them  later
+
+(10:24) and  then  there  is  a  lot  of  different
+
+(10:27) settings  i  will  leave  this
+
+(10:30) vimrc  file  in  the  description  so  you  can
+
+(10:34) check  it  you  can  copy  it  you  can  use  it
+
+(10:37) basically  what  i  did  uh
+
+(10:40) i  don't  know  maybe  four  years  ago
+
+(10:44) i  took  vimercy  file  from  my  friend
+
+(10:47) and  then  over  the  years  i  changed
+
+(10:50) something  here
+
+(10:51) so  let's  talk  about  plugins  for  plugins
+
+(10:54) i  use
+
+(10:55) this  thing  named  vim  plug
+
+(10:58) it's  a  really  nice  easy  to  use  thing  for
+
+(11:01) vim  plugins
+
+(11:02) there  are  a  couple  of  them  this  is  for
+
+(11:05) latex
+
+(11:08) we  don't  need  to  cover  it  here  this
+
+(11:10) video  is  not  about
+
+(11:11) weight  hacks  we  should  focus  about  on
+
+(11:14) this
+
+(11:15) it's  called  autosnips  and  it's  made  for
+
+(11:19) snippets  let's  see  a  demo
+
+(11:22) so  you  can  see  this  person  writes
+
+(11:25) something  and  then
+
+(11:26) something  appears  on  the  screen  so
+
+(11:28) basically  i  use  it  for
+
+(11:30) snippets  i  will  explain  just  right  now
+
+(11:33) what  i  mean  by  that
+
+(11:36) so  let's  go  to  our
+
+(11:40) um  vm  folder  where
+
+(11:43) we  have  all  our  plugins
+
+(11:46) let's  go  to  auto  snips  and  here  are  a
+
+(11:49) couple  of  files  for  each
+
+(11:51) extension  so  i  have  snippets  for  python
+
+(11:54) for  weight  tax
+
+(11:55) and  cbp  now  we're  interested  in  cdp
+
+(11:59) if  we  open  it  there  is  just  a  list  of
+
+(12:02) snippets  a  snippet  starts  with
+
+(12:04) where  snippet  ends  with  and  snippet
+
+(12:08) and  there  is  a  name  and  a  description
+
+(12:11) so  if  we  go  to  a  cpp  file
+
+(12:17) and  we  type  in  this  name  snips
+
+(12:22) and  press  tab  because  tab  is  my  trigger
+
+(12:26) for  autosnips  if  i  type  tab
+
+(12:29) then  it  will  replace  it  with  the  body
+
+(12:32) of  the  snippet  and  this  snippet  is  just
+
+(12:35) used  to  tell  me  which  snippets  i  have
+
+(12:40) there  are  a  lot  of  them  first  of  all  is
+
+(12:42) my  template
+
+(12:43) c  c  plus  uh  if  we  type
+
+(12:46) beg  tab  it  will  replace  it  with  my
+
+(12:49) setup  and  i  can  immediately  start
+
+(12:53) typing  inside  solve  function
+
+(12:56) then  there's  minimal  setup  this  for  loop
+
+(12:59) which  is  kind  of  more  tricky  as  you  can
+
+(13:02) see  there  are
+
+(13:03) lots  of  different  things  for  example
+
+(13:05) let's  type
+
+(13:06) f  o  r  tab  now  we  have  our  for  loop
+
+(13:11) it  starts  with  i
+
+(13:14) but  if  i  don't  want  to  use  i  as  my
+
+(13:17) traitor
+
+(13:18) i  can  just  type  j  and  it  replaced  it  in
+
+(13:21) three  different
+
+(13:23) places  then  we  press  tab
+
+(13:26) and  it  says  us  that  we  can  replace  our
+
+(13:29) n  but  for  example  we  don't  want  to  do
+
+(13:32) that
+
+(13:33) then  we  press  tab  and  now  we  are  inside
+
+(13:35) the  four
+
+(13:37) body  and  we  can  start  typing
+
+(13:40) there  are  a  lot  of  them  i  don't  want  to
+
+(13:42) go  through  them
+
+(13:43) right  now  also  i  will  leave  this  file  in
+
+(13:47) the  description  you  can  check  it  out
+
+(13:50) some  of  them  are  outdated  i  don't  use  it
+
+(13:52) anymore  i  think  i  should
+
+(13:55) go  through  this  and  replace  it  with  some
+
+(13:58) new  things
+
+(13:59) so  there's  gcd  function  binary  power
+
+(14:03) fft  from  tourist  kind  improved
+
+(14:06) um  suffix  array
+
+(14:10) accuracy  convex  how  trick
+
+(14:14) segment  reef  also  from  tourist
+
+(14:18) centroid  decomposition  sparse  table  tree
+
+(14:22) fenwick  2d  fenwick  module  arithmetics
+
+(14:26) and  so  on  and  what  we're  interested  in
+
+(14:28) is  this  it's
+
+(14:29) kind  of  one  of  the  most  important  things
+
+(14:32) if  i  type
+
+(14:33) brace  and  then  tab  it  will  replace  it
+
+(14:36) with
+
+(14:36) this  which  means  for  example  if  i  make
+
+(14:40) while  loop  i  print
+
+(14:43) brace  tab  and  it  will  make
+
+(14:46) a  closing  brace  and  i  will  be  inside
+
+(14:49) while  body  so  this  is  how  i  use  my  vim
+
+(14:54) i  will  leave  all  the  links  in  the
+
+(14:55) description  so  i  believe
+
+(14:58) that  if  you  want  you  can  make  the  same
+
+(15:01) setup  as  i  have  but  i  recommend  you
+
+(15:05) to  dive  into  it  more  deeply  to  find
+
+(15:09) maybe  something  that  suits  best  for  you
+
+(15:13) in  the  fourth  part  of  this  video  i'd
+
+(15:15) like  to  talk  about  my  c  plus  plus  setup
+
+(15:19) as  you  already  seen  if  we  type  beg
+
+(15:23) tab  it  will  bring  my
+
+(15:26) template  here  let's  go  through  it
+
+(15:29) first  line  is  if  def  on  pc
+
+(15:33) which  means  that  if  on  pc  in  default  is
+
+(15:35) defined
+
+(15:36) then  the  code  inside  this
+
+(15:40) body  will  be  executed  but
+
+(15:43) as  you  may  remember  from  my  vmrc  file
+
+(15:47) i  have  this  minus  d  on  pc  which
+
+(15:50) means  that  we  define  on  pc
+
+(15:54) so  i  will  have  on  pc  defined
+
+(15:57) on  my  computer  but  it's  not  defined
+
+(16:00) like  on  code  forces  or  other  test
+
+(16:02) systems
+
+(16:04) so  this  code  will  be  executed  only  on  my
+
+(16:07) computer
+
+(16:08) here  we  define  inside  it  glipstic  six
+
+(16:11) debug
+
+(16:12) which  is  kinda  does  the  same  thing  as
+
+(16:15) warnings
+
+(16:16) it  tells  you  when  you  do  something
+
+(16:19) completely  wrong
+
+(16:20) and  it  can  understand  it  immediately  of
+
+(16:24) course
+
+(16:24) you  should  put  this  before  you  do  any
+
+(16:27) includes
+
+(16:28) because  this  affects  the  code  inside
+
+(16:31) includes
+
+(16:32) also  i  use  bits  stdc  plus
+
+(16:36) dot  h  to  include  all  the  headings  i  need
+
+(16:40) uh  some  people  don't  use  it  because
+
+(16:44) it  just  includes  some  random  stuff  you
+
+(16:46) don't  need
+
+(16:47) but  whatever  i  don't  care  other  people
+
+(16:50) say
+
+(16:51) that  it's  takes  a  lot  of  time  to  compile
+
+(16:56) but  there  is  a  solution  to  it  i  will
+
+(16:58) leave  a  link  to  the  description
+
+(17:00) we  can  just  take  this  beats  stdc  plus  h
+
+(17:04) file  and  once  pre-compile  it
+
+(17:07) and  then  it  will  always  be  compiled  and
+
+(17:10) your  compilation  time
+
+(17:11) will  be  just  fine  also  i  don't  like  when
+
+(17:15) you  have  like
+
+(17:17) a  hundred  or  ten  include
+
+(17:20) lines  it  seems  kind  of  ugly  so  i  use
+
+(17:23) my  bits  stdc  plus  plus  dot  h
+
+(17:26) also  as  you  may  know  there  is  no
+
+(17:30) bits  stdc  plus  plus  h  on  mac  os
+
+(17:33) but  you  may  just  make  it  by  yourself
+
+(17:37) so  you  can  go  to  the  folder
+
+(17:40) where  you  have  your  c  plus  headings
+
+(17:44) create
+
+(17:45) [Music]
+
+(17:48) folder  names  bits  you  may  want  to  use
+
+(17:52) sudo  because  it's  probably  a  restricted
+
+(17:56) folder  and  then  create  file  named
+
+(17:59) plus  plus  dot  h  there  take  from  the
+
+(18:02) internet
+
+(18:04) what  this  file  should  be  and  just  copy
+
+(18:07) there  then  you  compile  it  once  and  then
+
+(18:10) your  compilation  time  will  be  great  okay
+
+(18:14) also  if  you're  using  like  visual  studio
+
+(18:18) i  think  there's  also  no  stdc  plus  dot
+
+(18:21) h  file  but  i  don't  know  what  to  do  with
+
+(18:24) that
+
+(18:25) you  can  google  it  then  i  have  two
+
+(18:28) defines
+
+(18:29) i  really  don't  like  defines  but  i  use
+
+(18:31) these  ones
+
+(18:33) uh  first  one  is  uh  if  you  have  like
+
+(18:37) want  to  use  size  of  an  array  or
+
+(18:40) something  so  we
+
+(18:41) have  like  vector  a
+
+(18:44) and  then  we  want  to  take  a  size  it  will
+
+(18:47) return  an  assigned  integer
+
+(18:49) and  if  we  make  a  loop  that  should  go
+
+(18:52) from  zero
+
+(18:53) to  the  size  minus  one
+
+(18:56) you  may  know  that  this  is  a  problem
+
+(18:58) because  if  the  size  of  zero
+
+(19:01) then  it's  unsigned  it  will  overflow
+
+(19:04) it  will  be  bad  so  it's  a  good  thing  to
+
+(19:07) do
+
+(19:08) always  cast  your  size  to  integer
+
+(19:11) but  it's  hard  you  will  forget  about  it
+
+(19:14) so  i  just  always  use  s  z
+
+(19:17) instead  of  size  this  is  also
+
+(19:20) kind  of  ugly  defined  but  what  is  that
+
+(19:24) what  it  does
+
+(19:24) when  i  use  any  chars  i  want  to  use
+
+(19:27) unsigned  charts
+
+(19:28) instead  because  chars  have
+
+(19:32) positive  numbers  negative  numbers  for
+
+(19:34) example  if  i  want  to  create  an  array  of
+
+(19:37) size  to
+
+(19:38) 256  and  for  each  character  i  want  to
+
+(19:43) store  the  number  of  occurrences
+
+(19:46) it  may  give  you  some  problems  because
+
+(19:49) if  you  take  like  array  and
+
+(19:52) here's  an  index  for  a  it  will  be  okay
+
+(19:55) because  it's  positive
+
+(19:57) but  for  negative  characters  it  will  be  a
+
+(20:00) disaster
+
+(20:01) so  i  think  it's  just  better  to  use  this
+
+(20:04) these  are  definitely  not
+
+(20:06) good  defines  for  like  a  real  word
+
+(20:09) programming
+
+(20:10) but  it  works  just  fine  for  me  when  i  do
+
+(20:13) my  competitive  programming  so  the  next
+
+(20:17) one  is  using  namespacestd
+
+(20:19) it's  just  there  is  no  way  you
+
+(20:22) may  argue  that  this  is  not
+
+(20:26) something  you  need  to  write  in  your
+
+(20:28) competitive  programming  setup
+
+(20:30) but  there  is  no  need
+
+(20:33) i  don't  know  how  to  say  it  there  is  no
+
+(20:35) need  to
+
+(20:37) delete  this  line  so  what  can  go  wrong
+
+(20:40) with  this
+
+(20:41) and  at  the  same  time  there  is  a  lot  of
+
+(20:44) things  that  can
+
+(20:45) can  go  wrong  if  you  don't  write  this
+
+(20:47) wine
+
+(20:48) and  also  you  will  always  need  to  do  like
+
+(20:51) std  vector  which  is
+
+(20:53) just  a  lot  then  we  have  our  random
+
+(20:56) numbers
+
+(20:58) uh  as  you  may  know  you  should  never  use
+
+(21:01) function  names  rand  if  you  don't  know
+
+(21:04) that
+
+(21:04) i  will  leave  a  link  in  description  why
+
+(21:06) it  is
+
+(21:08) so  we  always  use  our  mt1937  for  random
+
+(21:12) numbers
+
+(21:13) and  there  are  two  of  them  so  if  i
+
+(21:17) write  like  icpc  contest
+
+(21:20) then  i  want  to  use  constant
+
+(21:23) seed  but  if  i
+
+(21:27) compete  on  code  forces  i  don't  want
+
+(21:30) my  submissions  to  be  hacked  but  if  you
+
+(21:33) use
+
+(21:34) a  constant  seed  other  people  can  just
+
+(21:36) take  your  code
+
+(21:37) run  it  see  your  random  numbers  and  they
+
+(21:40) make  a  test
+
+(21:41) that  breaks  it  so  you  should  use
+
+(21:44) time  as  your  seed  and  also  you  should
+
+(21:48) use  time  that  updates  really  fast  so
+
+(21:51) this  line  just  takes  current  time  in
+
+(21:54) nanoseconds
+
+(21:55) so  there  is  no  way  someone  will  hack  you
+
+(22:00) then  we  have  two  typedefs  i  use
+
+(22:03) i  just  type  ll  when  i  need  to  use  one
+
+(22:07) guanx  and
+
+(22:08) ld  when  i  need  to  use  long  doubles
+
+(22:11) and  then  i  have  my  code
+
+(22:14) let's  go  to  the  main  i  use  this
+
+(22:18) because  sometimes  if  you  don't  want  to
+
+(22:22) waste  any  time  you  may  just
+
+(22:26) write  define  into  long  long  it's  a
+
+(22:29) really  bad  thing  to  do  but
+
+(22:30) whatever  and  it's  impossible  to  have  a
+
+(22:34) long  long  main  function
+
+(22:36) so  if  i  have  it  in  32t  not
+
+(22:39) int  then  it  won't  replace  it
+
+(22:42) also  it's  possible  to  just  delete  this
+
+(22:45) in  new  versions  of  cpus  plus
+
+(22:47) but  i  like  it  the  way  it  is  here
+
+(22:51) then  i  have  my  fast  input
+
+(22:54) settings  when  i  was  preparing  for  this
+
+(22:57) video
+
+(22:57) i  saw  that  i  have  this  in  my  template  as
+
+(23:00) you  may  know
+
+(23:01) this  line  is  completely  useless  so  let's
+
+(23:04) just  go  right  now  into  my
+
+(23:06) snippets  and  delete  the  swine
+
+(23:10) i  will  leave  a  link  in  description  why
+
+(23:12) this  wine  is
+
+(23:14) actually  useless  then  i  have  this
+
+(23:16) variable  that  tells
+
+(23:17) the  number  of  tests  i  have  i  use
+
+(23:20) multitasks
+
+(23:21) to  run  all  the  tests  that  i  have
+
+(23:25) in  one  run  uh  initially  i
+
+(23:29) set  it  as  a  random  big  number  like
+
+(23:32) billion  than  if  we  have
+
+(23:36) this  number  of  tests  um
+
+(23:39) as  a  number  in  our  input  then  i  will
+
+(23:42) uncomment  this  line  otherwise
+
+(23:44) i'll  have  like  pretty  much  infinite
+
+(23:47) number  of  tests
+
+(23:48) and  then  when  they  finish  i  will  just
+
+(23:51) break
+
+(23:52) so  we  call  ourselves  function  and
+
+(23:55) if  it  returns  one  it  means  that  there
+
+(23:58) are  no
+
+(23:59) more  tests  anymore  and  then  i  should
+
+(24:01) just  break
+
+(24:02) otherwise  we'll  loop  while  we  have
+
+(24:05) something
+
+(24:06) there  in  our  input  file  then  we  have
+
+(24:08) this
+
+(24:09) if-def  which  as  you  already  understood
+
+(24:13) will  only  compile  on  my  computer  not  on
+
+(24:16) chord  forces
+
+(24:17) and  it's  used  to  separate
+
+(24:20) outputs  from  different  tests  inside
+
+(24:23) multitask
+
+(24:25) and  then  at  the  end  we  have  we  just
+
+(24:28) print
+
+(24:29) the  time  of  execution  of  this
+
+(24:32) program  so  let's  for  example
+
+(24:36) read  a  number  uh  and
+
+(24:39) output  it  and  let's  go  to  our  input  file
+
+(24:43) as  you  can  see
+
+(24:43) there  are  four  numbers  one  three  five
+
+(24:46) six
+
+(24:46) and  if  we  run  it  what  we  will  see  one
+
+(24:50) three  five  six  separated  so  we
+
+(24:53) know  where  each  output  is  and
+
+(24:56) at  the  end  we  have  this  line  saying  as
+
+(24:59) how
+
+(25:00) long  it  took  to  compile  and
+
+(25:03) no  not  to  compile  to  run  this  file
+
+(25:07) so  i  will  leave  my  setup  cps  class  and
+
+(25:10) all
+
+(25:11) the  setups  that  talked  previously
+
+(25:14) in  the  description  and  you  can
+
+(25:18) check  it  maybe  take  something  from  it
+
+(25:21) to  your  setup  and  at  the  end
+
+(25:24) i'd  like  to  just  quickly  talk  about  my
+
+(25:27) terminal
+
+(25:29) i  use  item  2  as  my  terminal
+
+(25:32) and  i  use  o  my  zsh
+
+(25:35) inside  it  if  you  don't  know
+
+(25:39) what  it  is  you  can  check  the  description
+
+(25:42) it  will  be
+
+(25:42) there  so  this  was  my  competitive
+
+(25:46) programming  setup
+
+(25:47) if  you  found  this  helpful  please
+
+(25:50) subscribe  to  the  channel
+
+(25:52) and  watch  my  other  educational  videos  if
+
+(25:55) you  still  have  any
+
+(25:56) questions  don't  hesitate  to  write  them
+
+(25:58) in  the  comments
+
+(25:59) i  will  be  happy  to  answer  them  also
+
+(26:02) if  you  have  any  comments  suggestions
+
+(26:04) also  write  them  down  there
+
+(26:06) so  thank  you  for  watching  have  a  nice
+
+(26:08) day  goodbye

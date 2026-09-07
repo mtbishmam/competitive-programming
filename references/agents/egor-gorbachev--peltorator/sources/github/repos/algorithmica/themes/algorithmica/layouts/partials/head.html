@@ -1,0 +1,74 @@
+<head>
+  {{- partial "analytics.html" -}}
+
+  <meta charset="utf-8">
+
+  {{ $style := resources.Get "style.sass" | toCSS | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
+  <link rel="stylesheet" href="/syntax.css" id="syntax-theme">
+
+  <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+  <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+  {{ $dark := resources.Get "dark.sass" | toCSS | minify | fingerprint }}
+  <link rel="stylesheet" id="theme">
+
+  <script>
+    function toggleSidebar() {
+      console.log("Toggling sidebar visibility")
+      var sidebar = document.getElementById('sidebar')
+      var wrapper = document.getElementById('wrapper')
+      if (sidebar.classList.contains('sidebar-toggled') || window.getComputedStyle(sidebar).display == 'block') {
+        sidebar.classList.toggle('sidebar-hidden')
+        wrapper.classList.toggle('sidebar-hidden')
+      }
+      sidebar.classList.add('sidebar-toggled')
+      wrapper.classList.add('sidebar-toggled')
+    }
+    function switchTheme(theme) {
+      console.log("Changing theme:", theme)
+      document.getElementById('theme').href = (theme == 'dark' ? "{{ $dark.RelPermalink }}" : "")
+      document.getElementById('syntax-theme').href = (theme == 'dark' ? '/syntax-dark.css' : '/syntax.css')
+      localStorage.setItem('theme', theme)
+    }
+    if (localStorage.getItem('theme') == 'dark') {
+      switchTheme('dark')
+    }
+    window.addEventListener('load', function() {
+      var el = document.getElementById("active-element")
+      //console.log(el)
+      if (el) {
+        el.scrollIntoView({block: "center"})
+      }
+      /*
+      if (window.innerWidth < 1000) {
+        console.log("Hiding sidebar because window is too small")
+        toggleSidebar()
+      }*/
+    })
+    window.addEventListener('scroll', function() {
+      var menu = document.getElementById('menu')
+      if (window.scrollY < 120) {
+        //console.log("Hiding title")
+        menu.classList.remove('scrolled')
+      } else {
+        //console.log("Showing title")
+        menu.classList.add('scrolled')
+      }
+    })
+    // onkeypress didn't work with arrows for some reasons
+    window.addEventListener('keydown', function(e) {
+      if (e.key == 'ArrowLeft') {
+        document.getElementById('prev-article').click()
+      } else if (e.key == 'ArrowRight') {
+        document.getElementById('next-article').click()
+      }
+    })
+  </script>
+
+  {{- partial "katex.html" . -}}
+
+  {{ $title := print .Title " - " .Site.Title }}
+  {{ if .IsHome }}{{ $title = .Site.Title }}{{ end }}
+  <title>{{ $title }}</title>
+</head>

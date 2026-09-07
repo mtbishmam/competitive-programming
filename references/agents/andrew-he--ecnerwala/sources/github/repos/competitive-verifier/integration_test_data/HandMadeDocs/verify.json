@@ -1,0 +1,114 @@
+{
+    "$schema": "../../schema/verify_files.schema.json",
+    "files": {
+        "display/hidden.txt": {
+            "dependencies": [
+                "display/multi-no-keep.txt",
+                "display/hidden.txt",
+                "display/no-index.txt",
+                "display/never.txt",
+                "display/visible.txt"
+            ]
+        },
+        "display/no-index.txt": {
+            "dependencies": [
+                "display/multi-no-keep.txt",
+                "display/hidden.txt",
+                "display/no-index.txt",
+                "display/never.txt",
+                "display/visible.txt"
+            ]
+        },
+        "display/no-index2.txt": {
+            "document_attributes": {
+                "DISPLAY": "no-index"
+            },
+            "dependencies": []
+        },
+        "display/no-index3.txt": {
+            "document_attributes": {
+                "DISPLAY": "no_index"
+            },
+            "dependencies": []
+        },
+        "display/never.txt": {
+            "dependencies": [
+                "display/multi-no-keep.txt",
+                "display/hidden.txt",
+                "display/no-index.txt",
+                "display/never.txt",
+                "display/visible.txt"
+            ]
+        },
+        "display/visible.txt": {
+            "dependencies": [
+                "display/multi-no-keep.txt",
+                "display/hidden.txt",
+                "display/no-index.txt",
+                "display/never.txt",
+                "display/multi-never.txt",
+                "display/multi-never2.txt",
+                "display/visible.txt"
+            ]
+        },
+        "display/multi-no-keep.txt": {
+            "document_attributes": {
+                "TITLE": "Multi no keep $1$"
+            },
+            "dependencies": [
+                "display/multi-no-keep.txt",
+                "display/multi-no-keep2.txt"
+            ]
+        },
+        "display/multi-no-keep2.txt": {
+            "dependencies": [
+                "display/multi-no-keep.txt",
+                "display/multi-no-keep2.txt"
+            ]
+        },
+        "display/multi-never.txt": {
+            "document_attributes": {
+                "TITLE": "Multi never $1$"
+            },
+            "dependencies": [
+                "display/multi-never.txt",
+                "display/multi-never2.txt"
+            ]
+        },
+        "display/multi-never2.txt": {
+            "dependencies": [
+                "display/multi-never.txt",
+                "display/multi-never2.txt"
+            ]
+        },
+        "root.txt": {},
+        "a/b/c.txt": {},
+        "consolidate/1.txt": {},
+        "consolidate/2.txt": {},
+        "consolidate/a/1.txt": {},
+        "consolidate/a/2.txt": {},
+        "consolidate/a/b/1.txt": {},
+        "consolidate/a/b/2.txt": {},
+        "consolidate/z/1.txt": {},
+        "consolidate/z/2.txt": {},
+        "consolidate/z/b/1.txt": {},
+        "consolidate/z/b/2.txt": {},
+        "txts/utf-8👍.txt": {},
+        "txts/utf-16LE.txt": {
+            "document_attributes": {
+                "TITLE": "UTF-16LE"
+            },
+            "dependencies": [
+                "txts/utf-16BE.txt"
+            ]
+        },
+        "txts/utf-16BE.txt": {
+            "document_attributes": {
+                "document_title": "UTF-16BE"
+            },
+            "dependencies": [
+                "txts/utf-16LE.txt"
+            ]
+        }
+    }
+}

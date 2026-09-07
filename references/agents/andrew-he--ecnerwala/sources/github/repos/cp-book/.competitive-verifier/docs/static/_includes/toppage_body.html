@@ -1,0 +1,45 @@
+{%- comment -%}
+Overrides the competitive-verifier theme's toppage_body.html:
+- displays paths with the leading "src/" stripped (headers are included with
+  bare names via -I src);
+- Catch2 unit tests and their helpers (src/*.test.cpp, src/*.test.hpp) are
+  not verification files, so they get a 🧪 marker instead of the not-verified
+  warning icon.
+{%- endcomment -%}
+{%- if page.data.coverage -%}
+<h2>Coverage</h2>
+{%- assign coverage_report_href = "/coverage/" | relative_url -%}
+{%- include coverage_summary.html coverage=page.data.coverage report_href=coverage_report_href -%}
+{%- endif -%}
+{%- for top in page.data.top -%}
+<h2>{{ top.type }}</h2>
+{%- for category in top.categories -%}
+{%- assign category_name = category.name | remove_first: "src/" -%}
+{%- if category_name != "" -%}<h3>{{ category_name }}</h3>{%- endif -%}
+<ul class="index-files">
+    {%- for item in category.pages -%}
+    {%- assign name = item.path | remove_first: "src/" -%}
+    {%- if item.title -%}
+        {%- capture link_title -%}{{item.title | xml_escape }} <small>({{ name | xml_escape }})</small>{%- endcapture -%}
+    {%- else -%}
+        {%- capture link_title -%}{{name | xml_escape }}{%- endcapture -%}
+    {%- endif -%}
+    {%- if item.coverage -%}
+        {%- assign coverage_percent = item.coverage.rate | times: 100 -%}
+        {%- capture coverage_span -%}<span class="index-coverage"><span class="coverage-percent">{{ coverage_percent | round: 1 }}%</span><span class="coverage-bar"><span class="coverage-bar-fill{% if coverage_percent < 50 %} coverage-low{% elsif coverage_percent < 80 %} coverage-medium{% endif %}" style="width: {{ coverage_percent | round: 1 }}%"></span></span></span>{%- endcapture -%}
+    {%- else -%}
+        {%- assign coverage_span = "" -%}
+    {%- endif -%}
+    {%- assign is_unittest = false -%}
+    {%- if item.path contains ".test.cpp" or item.path contains ".test.hpp" -%}
+        {%- assign is_unittest = true -%}
+    {%- endif -%}
+    {%- if top.type == "Library Files" and is_unittest -%}
+    <li class="index-unittest"><a href="{{ item.path | relative_url }}">🧪 {{ link_title | xml_escape }}</a></li>
+    {%- else -%}
+    <li><a href="{{ item.path | relative_url }}">{{ site.icons[item.icon] }} {{ link_title | xml_escape }}</a>{{ coverage_span }}</li>
+    {%- endif -%}
+    {%- endfor -%}
+</ul>
+{%- endfor -%}
+{%- endfor -%}

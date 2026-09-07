@@ -1,0 +1,1517 @@
+Title: My Competitive Programming Setup
+
+(0:00) hey  everyone  in  this  video  i'm  going  to
+
+(0:02) be  talking  about  my  competitive
+
+(0:03) programming  setup
+
+(0:04) in  particular  i'll  be  covering  three
+
+(0:06) main  topics  the  first  is  the  terminal  i
+
+(0:08) use  the  second  is  my  editor  and  how  i
+
+(0:10) write  code
+
+(0:11) and  the  third  is  my  shell  scripts  and
+
+(0:13) how  i  stress  test
+
+(0:14) i  should  know  that this  isn't  intended
+
+(0:15) to  be  a  comprehensive  installation  guide
+
+(0:17) and  i  probably  won't  be  able  to  answer
+
+(0:19) most  questions  if  anyone  does  try  to
+
+(0:20) replicate  the  setup
+
+(0:22) um  largely  because  it's  very  difficult
+
+(0:23) to  diagnose  these  sort  of  configuration
+
+(0:25) issues  as  an  outside  observer
+
+(0:27) but  i've  included  links  to  relevant
+
+(0:28) tutorials  in  the  description  in  case
+
+(0:30) anyone's  interested  in
+
+(0:31) installing  any  of  the  tools  that  i  use
+
+(0:34) so  let  me  start  by  talking  about  my
+
+(0:36) terminal  so
+
+(0:37) as  my  terminal  i  use  the  windows
+
+(0:39) subsystem  for  linux  or  wsl
+
+(0:42) which  is  probably  best  described  as  a
+
+(0:43) linux  command  line  for
+
+(0:45) um  for  windows  and  i  use  it  largely
+
+(0:47) because  it's  necessary  for  my  stress
+
+(0:48) testing  scripts  there  are  also  a  few
+
+(0:50) linux  related  utilities  that  i  use  for
+
+(0:52) non-competitive  programming  reasons  that
+
+(0:54) are  pretty  useful
+
+(0:55) um  it's  technically  possible  to  write  a
+
+(0:57) stress  testing  script  for  the  windows
+
+(0:58) command  line
+
+(0:59) but  it  ends  up  being  a  lot  slower  the
+
+(1:01) windows  stress  testing  script  that  i
+
+(1:03) used  to  use  processes  around  10  tests  a
+
+(1:05) second
+
+(1:06) and  the  one  i  have  on  wsl  processes
+
+(1:09) roughly  in  the  range  of  100  tests  a
+
+(1:10) second  and  so  there's  a  pretty
+
+(1:12) significant  speed  difference
+
+(1:14) so  i've  included  a  link  to  the  um  to  the
+
+(1:16) official  wsl  setup  tutorial
+
+(1:18) in  the  description  you'll  probably  need
+
+(1:20) to  do  the  manual  installation  rather
+
+(1:22) than  the  simplified  one
+
+(1:23) just  because  or  unless  you're  a  member
+
+(1:25) of  the  windows  insiders  program
+
+(1:27) but  yeah  so  that's  how  you  can  set  up
+
+(1:28) wsl  um  iu
+
+(1:30) the  exact  distro  you  use  probably
+
+(1:32) doesn't  matter  that  much  i  use  ubuntu
+
+(1:34) just  because  it's  pretty  well  documented
+
+(1:36) and  so  that  made  it  easier  when  i  was
+
+(1:37) looking  up
+
+(1:38) configuration  issues  i  was  having  but
+
+(1:41) you  can  but  obviously  if  you're  more
+
+(1:42) comfortable  with  something  else  you  can
+
+(1:44) use  whatever  you  want
+
+(1:45) i  should  also  note  that  the  rest  of  the
+
+(1:46) tutorial  will  be  equally  applicable  to
+
+(1:49) linux  or  to  if  you're  running  native
+
+(1:51) linux  rather  than  wsl
+
+(1:53) or  even  if  you're  using  a  unix  style
+
+(1:55) command  line  on  on  a  mac  as  long  as  you
+
+(1:57) have  g  plus  plus  installed
+
+(2:00) all  right  um  and  so  as  far  as  the
+
+(2:03) specific  terminal  emulator  i  use
+
+(2:05) so  windows  provides  one  with  wsl  but  i
+
+(2:08) choose  to  use  wsl  tty  which  is  a  version
+
+(2:10) of  the  putty  terminal  designed  for  wsl
+
+(2:13) and  a  setup  link  for  wsl  tty  and  for  its
+
+(2:16) solarized  light  color  scheme
+
+(2:18) which  is  my  theme  of  choice  are  in  the
+
+(2:20) description
+
+(2:21) and  let's  see  yeah  so  yeah  i've  included
+
+(2:24) this  link  and  it  includes  both  a
+
+(2:25) tutorial  on  downloading  the  terminal
+
+(2:27) itself
+
+(2:28) and  getting  the  color  scheme  that  i  use
+
+(2:30) i  don't  think
+
+(2:31) as  i  recall  i  haven't  done  the  rest  of
+
+(2:33) the  setup  i  just  uh  deal  i  or  so
+
+(2:36) you  can  just  focus  on  the  color  scheme
+
+(2:38) and  then  the  base  installation
+
+(2:41) okay  so  after  installing  wsl  you'll  need
+
+(2:44) to  make  sure  to  install  g  plus  plus  if
+
+(2:46) it  isn't  already  set  up
+
+(2:47) um  yeah  i  think  it  so  i
+
+(2:50) if  i  recall  correctly  g  plus  plus  was
+
+(2:52) pre-installed  on  my  distribution
+
+(2:54) but  if  it's  not  there  then  you'll  need
+
+(2:56) to  install  it  the  other  thing  you're
+
+(2:57) going  to  need  to  do  is  you're  going  to
+
+(2:59) need  to  place  a  command  in  your
+
+(3:00) batch  rc  file  to  remove  the  stack  size
+
+(3:02) limit  because  the  default  stack  size
+
+(3:04) limit  that  comes  with  g
+
+(3:05) plus  plus  is  fairly  small  whereas  on
+
+(3:08) code  forces  your  programs  are  compiled
+
+(3:09) with  a  256  megabyte  stack  size  limit
+
+(3:12) and  so  programs  that  declare  like  um
+
+(3:14) that  declare  really  large  arrays  on  the
+
+(3:16) stack
+
+(3:16) may  end  up  crashing  on  your  computer
+
+(3:18) when  they  run  fine  on  an  online  judge
+
+(3:20) and  so  to  prevent  that  sort  of  bit  of
+
+(3:22) inconsistent  behavior
+
+(3:23) you'll  need  to  add  a  line  to  your  batch
+
+(3:26) rc  that  i  will  show  you  real  quick
+
+(3:29) yeah  so  that  this  is  you  limit  dash  s
+
+(3:31) unlimited
+
+(3:32) um  pasted  i  pasted  this  into  the
+
+(3:34) description
+
+(3:35) and  that  basically  removes  the  stack
+
+(3:37) size  limit  entirely  the  reason  i  remove
+
+(3:39) the  stack  size  limit  rather  than  just
+
+(3:40) setting  it  to  256  megabytes  like  code
+
+(3:42) forces
+
+(3:43) is  because  some  other  platforms  have
+
+(3:45) other  stack  size  limits
+
+(3:46) and  there's  some  contests  like  facebook
+
+(3:49) hacker  cup
+
+(3:50) where  you  may  need  to  run  a  program  on
+
+(3:51) large  inputs  on  your  own  end
+
+(3:53) um  and  you  may  want  to  have  a  larger
+
+(3:56) stack  size  limit  for  that  purpose
+
+(3:57) so  i  just  set  my  stack  size  limit  to
+
+(3:59) unlimited  and  then  i
+
+(4:01) just  have  to  be  careful  myself  to  make
+
+(4:03) sure  that  i  don't  end  up  writing  a
+
+(4:04) program  that  uses  too  much  stack  space
+
+(4:07) um  but  yeah  so  the  command  is  in  the
+
+(4:08) description  now  as  far  as  my  folder
+
+(4:10) setup  it's  fairly  simple
+
+(4:12) um  in  fact  there  are  only  two  main
+
+(4:14) folders  i'm  going  to  need  to  tell  you
+
+(4:16) about  now
+
+(4:16) so  the  first  is  my  main  competitive
+
+(4:18) programming  folder
+
+(4:20) and  within  this  folder  i  have  a  separate
+
+(4:22) subfolder  for  every  contest  that  i  do
+
+(4:24) and  so  for  example  if  i  go  to  yes  or
+
+(4:28) um  i  guess  the  div  two  brand  that  was
+
+(4:29) two  days  ago  now  that  had  a  contest  id
+
+(4:32) 1526  and  so  i've  made  it  and  so  back
+
+(4:34) when  i  was  competing  i  made  a  folder
+
+(4:36) cf-1526  for  it
+
+(4:38) and  i'll  show  you  what  all  is  in  here  as
+
+(4:40) you  can  see  i  have  my  solutions  to  the
+
+(4:42) six  problems
+
+(4:43) i  also  have  a  few  um  a  few  additional
+
+(4:45) files  that  i  wrote  the
+
+(4:47) as  you  can  see  i  have  a  generator  and  a
+
+(4:48) slow  solution  for  c
+
+(4:50) and  then  i  wrote  an  interactor  for  f  and
+
+(4:52) that  was  that  what  happened  when  i  was
+
+(4:54) stress  testing  those  problems  and  so
+
+(4:56) i'll  be  getting  to  how  i  stress  test  the
+
+(4:57) or  how  i  stress  test  in  a  moment
+
+(5:00) okay  and  then  the  other  folder  that  is
+
+(5:02) relevant  is  i  have
+
+(5:03) a  scripts  folder  and  this  is  basically
+
+(5:06) where  i  store  all  of  my  shell  scripts
+
+(5:08) that  i  use  for  stress  testing
+
+(5:10) again  more  on  that  in  a  bit  okay
+
+(5:13) so  let's  go  over  my  editor  my  editor  of
+
+(5:16) choice  is  vim
+
+(5:17) obviously  you  can  use  whatever  you  want
+
+(5:18) but  i  like  to  have  nice  shortcuts
+
+(5:20) i  should  note  that  you  can  only  run
+
+(5:22) linux  command  line  editors  within  wsl
+
+(5:25) um  i've  heard  that  there's  a  work  around
+
+(5:26) to  get  linux  inter  um
+
+(5:28) linux  uh  i  can't  remember  what  the  word
+
+(5:30) is  but  linux  graphical  applications  to
+
+(5:32) work  but  i  haven't  explored  it  yet  and
+
+(5:33) i've  heard  it's  kind  of  a  paint  just  set
+
+(5:35) up
+
+(5:36) um  but  that  said  you  can  also  just
+
+(5:38) access  files  through  explorer  and  run
+
+(5:40) your  preferred  editor
+
+(5:41) from  windows  so  you're  also  welcome  to
+
+(5:43) use  a  windows  application  or  a  different
+
+(5:45) linux  command  line  editor
+
+(5:46) and  let  me  show  you  how  to  access  your
+
+(5:48) linux  files  through  the  windows  explorer
+
+(5:53) so  if  you're  using  ubuntu  then  what
+
+(5:55) you're  going  to  do  is  you're  going  to  go
+
+(5:56) up  to  the  path  editor  here
+
+(5:58) and  you're  going  to  type  in  backslash
+
+(6:00) backslash  wsl  dollar  sign  backslash
+
+(6:02) ubuntu
+
+(6:04) and  you  go  here  and  it  will  uh  take  you
+
+(6:07) to  your
+
+(6:08) base  directory  and  you're  going  to  go  to
+
+(6:09) home  and  then  you're  going  to  click  your
+
+(6:11) username
+
+(6:12) and  then  that'll  get  you  into  your  main
+
+(6:13) folder  and  if  you're  set  up  like  me
+
+(6:15) you'll  go  into  your  competitive
+
+(6:16) programming  folder
+
+(6:17) and  then  let's  say  i  want  to  go  edit  a
+
+(6:20) file  here
+
+(6:21) and  then  if  i  want  to  say  like  write
+
+(6:23) some  code  or  edit
+
+(6:24) edit  this  file  using  genie  then  i  could
+
+(6:27) just
+
+(6:28) um  yeah  i  could  just  open  it  with  genie
+
+(6:33) alternatively  you  can  just  and  so  you
+
+(6:35) and  so  if  you  want  you  can  just  create  a
+
+(6:36) new  file  from  the
+
+(6:38) explorer  and  then  edit  it  in  your  id  of
+
+(6:39) choice
+
+(6:41) but  anyway  i  i  choose  to  use  them
+
+(6:45) okay  so  as  far  as  my  vimrc  let  me  open
+
+(6:48) it  up  and  i'll  walk  you  all  through  it
+
+(6:51) so  these  first  17  lines  or  so  just
+
+(6:54) include  some  general  editor  settings
+
+(6:55) just  to  make  or  just  to
+
+(6:57) make  life  a little  easier  i'm  not  going
+
+(6:59) to  go  over  all  these  in  detail  since
+
+(7:00) they're  well
+
+(7:01) documented  online  um  the  main  one  that
+
+(7:03) maybe  is  a  matter  of  personal  preference
+
+(7:05) is  i  use  relative  numbering
+
+(7:07) rather  than  just  rather  just  numbering
+
+(7:09) itself  and  this  means  that  the  number
+
+(7:11) next  to  my  current  line  displays
+
+(7:12) but  then  everything  er  but  then  all  the
+
+(7:15) other  numbers
+
+(7:16) represent  the  distance  between  my
+
+(7:17) current  line  and  uh  the  line  they  refer
+
+(7:20) to
+
+(7:20) and  this  is  helpful  because  for  when  i'm
+
+(7:22) using  them  hotkeys  to  jump  around  like
+
+(7:24) for  example  if  i  know  i  want  to  go  to
+
+(7:26) this  line  about  my  other  key  bindings  i
+
+(7:28) can  just  press  12  and  then
+
+(7:30) go  down  um  yeah  okay
+
+(7:33) so  these  next  lines  are  my  um  or  say
+
+(7:36) next  lines  to  find  my  theme
+
+(7:38) you're  going  to  need  to  get  the  solarize
+
+(7:40) vin  or  vim  theme  and  i'll  put  a  link  to
+
+(7:42) that  in  the  description
+
+(7:43) you're  also  going  and  keep  in  mind  that
+
+(7:45) this  theme  is  going  to  require  you  to
+
+(7:47) also  have  a  solarize  light  terminal
+
+(7:49) theme
+
+(7:49) in  order  for  the  colors  to  look  right
+
+(7:51) and  so  again  you  if  you're  using  wsl  tty
+
+(7:54) or  if  you're  using  putty
+
+(7:55) on  linux  the  links  for  that  are  in  the
+
+(7:58) descript  are  in  the  description
+
+(7:59) otherwise  you're  going  to  need  to  find  a
+
+(8:01) solarize  terminal  theme  for  whichever
+
+(8:03) terminal  emulator  that  you're  using
+
+(8:05) in  order  for  this  to  work  properly  okay
+
+(8:08) so
+
+(8:09) here  there's  a  few  more  key  bindings  um
+
+(8:11) the  first  one  is  just  bracket  auto
+
+(8:12) completion
+
+(8:13) um  this  one  maps  jk  to  escape  because  i
+
+(8:16) find  that  hitting  the  escape  key  is  kind
+
+(8:17) of  a  pain
+
+(8:19) this  one  allows  me  to  use  control  a  to
+
+(8:23) copy  all  of  my  code  okay  so  this  next
+
+(8:27) so  this  next  line  basically  create
+
+(8:29) whenever  i  create  a  new  c  plus  plus  file
+
+(8:32) it  types  in  my  template  for  me  and
+
+(8:34) sierra  and  so  if  you  use  my
+
+(8:36) mrc  you  are  going  to  need  to  replace
+
+(8:37) this  with  a  line  to  your
+
+(8:40) or  with  that  sorry  with  the  path  to  your
+
+(8:41) template
+
+(8:44) now  these  next  two  lines  are  pretty
+
+(8:45) important  they're  how  i  compile  and  run
+
+(8:47) so  this  line  makes  it  so  that  whenever  i
+
+(8:50) press  f
+
+(8:50) the  f9  key  my  code  is  compiled  now  you
+
+(8:54) could  just  put  a  g  plus  plus  command  in
+
+(8:56) here  but  instead  i  use
+
+(8:57) build.sh  which  is  a  shell  script  that  i
+
+(8:59) wrote  that  builds  my  files  for  me
+
+(9:01) and  i  will  show  you  that  what  that  looks
+
+(9:03) like  in  a  moment  i'll  put  a  link  in  the
+
+(9:04) description
+
+(9:05) um  but  this  does  mean  that  you're  going
+
+(9:07) to  that  if  you  want  to  use  this  command
+
+(9:09) exactly
+
+(9:09) you're  going  to  need  to  use  um  you're
+
+(9:12) going  to
+
+(9:12) need  to  use  the  build.sage  script
+
+(9:15) otherwise  you  can  replace  this  with
+
+(9:17) a  with  like  the  g  plus  plus  command
+
+(9:19) direct  to  compile  it  directly
+
+(9:21) and  then  f10  just  compile  or  just  runs
+
+(9:24) the  compiled  program
+
+(9:27) okay  these  next  few  lines  are  some  latex
+
+(9:29) settings  so  they're  not  going  to  be
+
+(9:31) important  for  competitive  programming
+
+(9:33) um  then  i  have  some  plugins  set  up  here
+
+(9:35) as  you  can  see  i  don't  exactly  have  a
+
+(9:36) large  array  of  plugins  i  use  i  like  to
+
+(9:39) i  like  to  go  with  a  base  setup
+
+(9:40) especially  because  it  makes  it  easier  to
+
+(9:42) adjust  to  on-site  contests  because  i'm
+
+(9:44) not  missing  any  tools  that  i'm  used  to
+
+(9:46) um  and  so  all  i  have  is  vimtex  which
+
+(9:49) again  is  for
+
+(9:50) latex  and  then  a  highlighting  plugin
+
+(9:52) just  because  i  think  it  looks  better
+
+(9:55) and  then  here  these  are  a  few  more  latex
+
+(9:57) settings  and  then  finally  down  here
+
+(9:59) this  is  a  block  of  code  that  basically
+
+(10:01) makes  it  so  that  i  can  copy  code  from
+
+(10:03) vim
+
+(10:04) into  the  windows  clipboard  um  yes  you'll
+
+(10:07) need  to  put  this  in  here  in  order  for
+
+(10:09) the  in  order  for  the  windows  clipboard
+
+(10:11) to  be  compatible  with  them
+
+(10:14) all  right  awesome  so  that's  my  vimrc  and
+
+(10:17) then  the  other  thing  i  should  go  over
+
+(10:18) is  how  i  use  my  library  so  if  we  go  into
+
+(10:22) bimcp
+
+(10:23) um  so  what  i  do  is  i  store  my  library  in
+
+(10:26) this
+
+(10:26) library  folder  and  so  you  can  see  i  have
+
+(10:29) a
+
+(10:30) quite  a  bit  of  code  in  here  um
+
+(10:33) i'm  not  going  to  be  releasing  my  library
+
+(10:35) just  because  first  of  all  because  most
+
+(10:36) of  it  is  copied  from  other  sources  and
+
+(10:38) so
+
+(10:39) i  can't  really  claim  credit  for  the
+
+(10:40) majority  of  this  code  and  secondly
+
+(10:42) because  a  lot  of  it  is  not  like
+
+(10:44) particularly  well  tested  or  maintained
+
+(10:46) and  so  it  may  be  a  little  bit  confusing
+
+(10:47) or  difficult  to  use
+
+(10:49) um  but  yeah  and  so  when  i  want  to  use
+
+(10:52) this  library  let  me  uh
+
+(10:54) cd  into  this  uh  demo  folder  i  created
+
+(10:57) so  we  go  into  this  test  file
+
+(11:01) so  as  you  can  see  first  of  all  when  i
+
+(11:02) created  this  file  it  was  filled  in  with
+
+(11:04) my  template
+
+(11:06) and  then  what  i  do  to  add  a  folder  file
+
+(11:08) for  my  library  is  i  do
+
+(11:10) colon  r  um  dot  dot  slash  library
+
+(11:14) slash  um  let's  say  i  want  to  add  the  uh
+
+(11:17) modular  in
+
+(11:18) template  then  i  would  do  mi  dot  cpp
+
+(11:21) and  then  the  mod  in  template  will  appear
+
+(11:24) in  here
+
+(11:26) so  yeah  um  basically  dot  dot  slash
+
+(11:29) library  slash
+
+(11:30) mi  dot  cpp  is  the  relative  path  to
+
+(11:33) my  mi  folder  instead  of  you  and  so  in
+
+(11:35) order  for  this  to  work
+
+(11:36) you're  going  to  need  um  you're  going  or
+
+(11:39) your
+
+(11:40) library  folder  is  going  to  need  to  be  a
+
+(11:41) sibling  of  the  folder  that  you're
+
+(11:43) currently  working  in
+
+(11:45) um  okay  great  so  i  think  that's  all  i
+
+(11:49) have  on  my  editor
+
+(11:50) so  now  i'm  going  to  talk  about  my  stress
+
+(11:52) testing  scripts
+
+(11:53) so  for  anyone  who  isn't  familiar  with
+
+(11:55) what  stress  testing  is  the  basic  idea  is
+
+(11:58) if  you  have  a  probe  grant  is  if  you  have
+
+(11:59) a  program  that
+
+(12:01) is  um  that's  wrong  but  you  don't  know
+
+(12:03) what  test  case  it  would  fail
+
+(12:05) and  you  also  potentially  have  a  pro  and
+
+(12:07) you  also  know  how  to  write  a  solution
+
+(12:09) that  is  correct  but  it  probably  is  too
+
+(12:10) slow  to  get  ac
+
+(12:12) stress  testing  is  a  way  to  use  those  two
+
+(12:14) solutions
+
+(12:15) to  give  you  a  to  generate  a  test  case  on
+
+(12:18) which
+
+(12:18) this  on  which  your  wrong  solution  gives
+
+(12:20) an  incorrect  answer
+
+(12:22) which  that  makes  it  much  easier  to  debug
+
+(12:24) so  let  me  show  you  my
+
+(12:25) script  folder  again  um  the  one  that  i'm
+
+(12:28) going  to  talk  about  real  quick
+
+(12:29) separately  is  my  build.sh  script
+
+(12:32) and  this  is  just  a  way  for  me  to  compile
+
+(12:34) my  code
+
+(12:35) and  so  the  idea  is  um  so  dollar  sign  one
+
+(12:39) is  filled  in  with  the  argument
+
+(12:40) and  so  the  idea  is  if  i  run  build.sh
+
+(12:44) a  then  it's  going  to  compile  a  dot  cpp
+
+(12:47) into  an  output  file  named  a  and  this  is
+
+(12:49) useful  because
+
+(12:51) typically  on  on  linux  the  output  file  is
+
+(12:55) or  the  output  file  for  any  c  plus
+
+(12:57) compilation  is  just  labeled  a  dot  out
+
+(12:59) unless  you
+
+(13:00) chain  unless  you  change  it  and  so  but
+
+(13:03) and  um
+
+(13:04) and  that  could  be  bad  because  it  means
+
+(13:05) that  if  you  compile  multiple  files  then
+
+(13:08) the  last  one  you  compile  will  replace
+
+(13:09) all  the  others  and  so
+
+(13:12) um  and  so  by  like  compiling  every  like  a
+
+(13:14) dot  cpp
+
+(13:15) to  a  file  named  a  b  dot  cpp2  file  name  b
+
+(13:19) i  can  make  i  can  have  multiple  compile
+
+(13:21) compiled  files
+
+(13:22) in  my  folder  at  once
+
+(13:25) um  okay  now  before  you  or  now  in  order
+
+(13:28) to  use  these  scripts
+
+(13:30) um  i've  included  links  to  all  of  my
+
+(13:32) scripts  in  the  in  the description  and
+
+(13:34) i'll  be  talking  about  more  about  these
+
+(13:35) other  three  interact
+
+(13:36) stress  and  validate  in  a  moment  um  but
+
+(13:38) in  order  to  use  any  of  them
+
+(13:40) you're  going  to  need  to  um  go  into  dot
+
+(13:42) bash  rc
+
+(13:44) and  you're  going  to  need  to  add  um
+
+(13:48) this  line  export  path  equals  dollar  sign
+
+(13:51) path  colon
+
+(13:52) tilde  script  slash  and  that  basically
+
+(13:55) adds  scripts  to  your  path
+
+(13:57) or  as  the  um  which  ensures  that  you'll
+
+(13:59) be  able  to  run  all  of  them
+
+(14:00) from  anywhere  on  your  computer  and  that
+
+(14:02) way  you  don't  need  to  copy  the  script
+
+(14:04) into  every  single  folder  in  which  you
+
+(14:06) want  to  use  them
+
+(14:07) because  they'll  be  accessible  anywhere
+
+(14:10) all  right  so  now  let  me  go  over  some
+
+(14:14) examples  and  so  i  prepared  some  demos
+
+(14:18) for  all  of  these
+
+(14:20) just  with  a  few  very  simple  tasks  so
+
+(14:23) let's  say  that  as  our  first  task
+
+(14:26) we're  just  asked  to  get  um  we're  just
+
+(14:28) given  two  integers  a  and  b
+
+(14:30) and  we  have  to  print  their  sum  and  let's
+
+(14:32) say
+
+(14:33) for  some  reason  we  wrote  this  wrong
+
+(14:35) solution
+
+(14:38) that  it  reads  in  a  and  b  and  then  it
+
+(14:41) outputs
+
+(14:41) a  plus  b  plus  1  for  some  reason
+
+(14:45) and  let's  just  say  for  the  sake  of
+
+(14:46) argument  that  we  have  no  idea  why  this
+
+(14:48) is  incorrect
+
+(14:49) but  we  also  have  this  slow  solution
+
+(14:53) that  computes  a  plus  b  by  using  loops  by
+
+(14:57) going  up  to  a  and  adding  one  each  time
+
+(14:59) and  then  going  up  to  b  and  adding  one
+
+(15:00) each  time  printing  the  answer
+
+(15:03) um  yeah  and  so  this  is  the  general  setup
+
+(15:05) we  have  for  our
+
+(15:06) for  stress  testing  we  have  a  pro  a
+
+(15:08) problem  where  there's  only  one  correct
+
+(15:10) answer
+
+(15:12) and  we  have  a  program  that's  wrong  and
+
+(15:14) we  have  a  program  that's  right  but  it's
+
+(15:15) too  slow
+
+(15:16) so  what  we  can  do  here  to  stress  test  it
+
+(15:18) is  we're  going  to  need  to  write  a
+
+(15:19) generator
+
+(15:21) and  that's  in  a  gen  dot  cpp
+
+(15:25) and  so  what  this  generator  does  is  it
+
+(15:27) generates  it  lets  a  be  a  random  integer
+
+(15:29) from  0  to  10
+
+(15:30) and  b  be  a  random  integer  from  0  to  10
+
+(15:32) and  it  prints  them
+
+(15:34) this  uid  macro  is  defined  in  my  template
+
+(15:37) and  it  basically  set  basically  uid  of  a
+
+(15:40) comma  b
+
+(15:40) prints  a  random  integer  uniformly
+
+(15:43) distributed  from  a  to  b
+
+(15:45) inclusive  um  okay  so  i  generate  a  and
+
+(15:49) or  so  i  have  this  generator  and  then
+
+(15:51) this  is  where  we  get  into  the  stress  dot
+
+(15:52) sh  script
+
+(15:54) so  basically  the  the  general  format  of
+
+(15:56) stress  dot  sh
+
+(15:58) is  you  have  a  is  he  runs  stress  dot  sh
+
+(16:01) wrong  solution
+
+(16:02) slow  solution  generator  and  then
+
+(16:05) and  then  a  number  of  tests
+
+(16:08) and  then  it'll  print  out  a  test  on  which
+
+(16:11) wrong  solution  and  slow  solution  give
+
+(16:13) different  outputs
+
+(16:15) and  so  if  i  want  to  use  it  here  i  would
+
+(16:18) do  stress.sha  wrong
+
+(16:20) a  slow  a  gen  and  let's  say  we  want  to
+
+(16:22) run  it  on  100  tests
+
+(16:24) and  it'll  tell  me  okay  there's  an  error
+
+(16:26) the  input  is  9
+
+(16:27) 7  and  then  a  wrong  gives  me  a  17
+
+(16:30) while  a  slow  gives  me  16.  and  so  now  i
+
+(16:33) know  i  can  go  in  and  i  can  figure  out  in
+
+(16:35) a  wrong  way  isn't  outputting  17.
+
+(16:38) and  so  just  to  show  you  what  happens  if
+
+(16:40) your  solution  doesn't  end
+
+(16:42) or  if  you  have  a  correct  solution  so  i
+
+(16:45) have
+
+(16:45) so  here's  the  correct  solution  i  wrote
+
+(16:47) just  adds  a  and  b  as  you  might  expect
+
+(16:50) then  i  can  do  stress  dot  sh  a
+
+(16:53) a  slow  a  gen  100  and  it  passes  100  tests
+
+(16:58) pretty  quickly  actually  all  right
+
+(17:01) so  yeah  so  that's  how  stress  testing  is
+
+(17:03) that's  how  stress  testing  works
+
+(17:05) now  one  issue  you  might  run  into
+
+(17:06) occasionally  is  in  certain  problems
+
+(17:08) there  can  be  multiple  correct  outputs
+
+(17:11) and  this  is  particularly  prominent  in
+
+(17:12) constructives  it  might  be  import  like
+
+(17:14) you  might
+
+(17:15) you  might  have  two  correct  solutions
+
+(17:17) that  give  different  responses
+
+(17:18) and  so  this  stress  testing  system  won't
+
+(17:20) work  because  you
+
+(17:22) um  because  your  solution  might  be
+
+(17:25) correct  but  it  might  still  give
+
+(17:26) different  output  from  your
+
+(17:27) solution  and  that's  where  validate.sh
+
+(17:30) comes  in  so
+
+(17:32) basically  or  so  let  me  um  first  show  you
+
+(17:34) the
+
+(17:35) second  sample  task  um  so  here  i've  given
+
+(17:38) just  a  simple
+
+(17:39) trivial  constructive  task  we're  given  an
+
+(17:41) integer  a  and  we  have  to  print  two
+
+(17:42) integers  b
+
+(17:43) and  c  such  that  a  plus  b  is  equal  to  c
+
+(17:46) and  let's  say  you  have  a  wrong  solution
+
+(17:50) where  um  you  let  or  where  you  just  let  b
+
+(17:55) be  or  you  let  b  be  a  random  integer  from
+
+(17:58) zero  to  one
+
+(17:59) and  then  you  print  b  and  then  you  just
+
+(18:01) print  a  again
+
+(18:02) now  whenever  b  is  um  is  equal  to  one
+
+(18:04) this  is  going  to  be  wrong  because  a  plus
+
+(18:06) one  is  not  equal  to  a
+
+(18:08) so  the  solution  is  wrong  um
+
+(18:12) and  so  basically  and  so  the  way  you  can
+
+(18:14) stress  test  if  you  have  a
+
+(18:16) um  and  so  the  way  what  you  need  in  order
+
+(18:18) to  stress  test  when  you  have  a
+
+(18:20) constructive  problem  or  a  problem  where
+
+(18:21) there  might  be  multiple  correct  answers
+
+(18:24) is  you're  going  to  need  a  generator
+
+(18:25) again  so  let  me  show  you  the  one  i  wrote
+
+(18:27) this  just  lets  a  be  a  random  integer
+
+(18:29) from  0  to  10  and  then  outputs  it
+
+(18:32) and  then  what  you're  going  to  need  is  a
+
+(18:34) validator  so
+
+(18:36) how  a  validator  works  in  my  in  my  system
+
+(18:38) is
+
+(18:39) it  it's  going  to  be  passed  first  the
+
+(18:41) input  to  the  original  program
+
+(18:43) so  this  value  a  and  then  it's  going  to
+
+(18:45) be  past  whatever  your  program  outputs
+
+(18:48) and  so  here  that's  b  and  c  and  then
+
+(18:51) after  and  then  after  it  receives  the
+
+(18:53) original  program's  input
+
+(18:55) and  your  program's  output  what  it  has  to
+
+(18:57) do  is  if  the  output  is  correct  it  has  to
+
+(18:59) print  out
+
+(19:00) okay  all  caps  and  otherwise  it  has  to
+
+(19:02) just  print  out  anything  else
+
+(19:05) and  so  here  i  check  it  i  just  check  if  a
+
+(19:07) plus  b  is  equal  to  c  and  if  it  is  i  just
+
+(19:10) output  okay  and  otherwise  i
+
+(19:12) say  no  this  is  bad  and  i  explain  why
+
+(19:14) it's  wrong
+
+(19:16) and  so  now  i  can  use  my  valid  sh  script
+
+(19:20) and  the  general  format  is  you  have  your
+
+(19:22) solution  a  validator  a  generator  and  the
+
+(19:25) number  of  tests
+
+(19:27) and  so  here  i  would  use  b  wrong
+
+(19:30) b  val  b  gen  100
+
+(19:34) and  um  yeah  here  you  can  see  that  i  put
+
+(19:36) that  my  input  was  six  my  out  and  then  i
+
+(19:39) i  output  one  six  um  but  that's  bad
+
+(19:42) because  one  or  because  six  plus  one  is
+
+(19:44) equal  to  seven  not  six
+
+(19:47) um  okay  and  again  i  wrote  a  correct
+
+(19:49) solution  here
+
+(19:50) i  just  let  b  equal  one  and  then  i  output
+
+(19:53) b  and  a  plus  b
+
+(19:54) and  when  i  don't  have  an  error
+
+(20:01) it  just  passes  100  tests  nice  and  easy
+
+(20:04) okay  so  that's  for  so  that  basically
+
+(20:07) lets  you  deal  with  constructive  problems
+
+(20:08) and  between  the  two  those  two  scripts
+
+(20:10) those  will  let  you
+
+(20:11) stress  test  the  vast  majority  of
+
+(20:13) problems  but  there's  one  category  left
+
+(20:15) that  these  don't  deal  with  nicely
+
+(20:17) and  that's  interactive  problems  and
+
+(20:19) interactive  problems  are  particularly
+
+(20:21) annoying  to  stress  test  and  the  script
+
+(20:22) that  i  have  is  pretty  janky
+
+(20:24) but  um  i  do  have  a  stress  tester  script
+
+(20:27) to  go  or  t
+
+(20:28) or  to  use  and  so  i  will  go  ahead  and  go
+
+(20:30) over  that  now
+
+(20:32) i  should  note  that  there's  an  additional
+
+(20:34) file  that's  necessary  for  the
+
+(20:35) interactive  script  to  work  in  addition
+
+(20:37) to  the  interact.sh  script  that  i've
+
+(20:38) linked  in  the  comments
+
+(20:40) um  and  so
+
+(20:44) let  me  show  you  that  right  now  so
+
+(20:48) what  you're  going  to  need  to  do  is
+
+(20:49) you're  going  to  need  to  go  into  your
+
+(20:50) light  and  into  your  library
+
+(20:52) and  um  you're  going  to  need  to  go  or  and
+
+(20:55) you're  going  to  need
+
+(20:55) to  add  a  file  runner.pi  that  i've  linked
+
+(20:57) in  the  description
+
+(20:59) um  i  did  not  write  this  file  i  actually
+
+(21:00) don't  remember  where  i  got  it  it  was  a
+
+(21:02) while  back
+
+(21:03) um  but  yeah  this  is  not  mine  and  so
+
+(21:06) this  program  essentially  gives  you  two
+
+(21:08) or  lets  you  put  in  two  programs
+
+(21:11) and  run  them  against  each  other  and  so
+
+(21:14) then
+
+(21:14) and  you're  going  to  need  to  include  or
+
+(21:16) to  put  this  somewhere  on  your  computer
+
+(21:18) and  then  in  the  interact.sh  script
+
+(21:21) you're  going  to  need  to  include  a  link
+
+(21:22) to  the  pat  or
+
+(21:23) the  path  to  runner.pi  in  this  script
+
+(21:27) so  if  you  decide  to  try  and  use  the
+
+(21:28) script  you're  going  to  need  to  replace
+
+(21:30) this  with  the  path  to  your
+
+(21:31) writer.pi
+
+(21:34) okay  now  let's  go  back  to  the
+
+(21:37) demonstration
+
+(21:40) the  third  sample  task  is  just  to  process
+
+(21:42) a  number  of  queries  interactively
+
+(21:44) where  for  each  query  you  just  have  to
+
+(21:46) add  two  numbers
+
+(21:50) okay  so  let's  say  we  have  this  wrong
+
+(21:52) solution  here
+
+(21:53) and  again  we're  just  out  we're  going  to
+
+(21:55) read  an  a  and  b  and  we're  going  to
+
+(21:56) output  a  plus  b  plus  one  and  flush  the
+
+(21:58) output
+
+(22:00) um  okay  so  this  is  wrong  but  then  the
+
+(22:02) way  we  can  stress  test  it  is  we're  going
+
+(22:04) to  need  to  write  an  interactor  and  the
+
+(22:05) interactor  is  going  to  need  to  generate
+
+(22:07) a  test
+
+(22:08) and  then  essentially  play  the  role  of
+
+(22:09) the  judge  and  interact  with  the  uh
+
+(22:11) or  and  interact  with  the  um  participants
+
+(22:14) program  or  i  guess  your  incorrect
+
+(22:16) solution
+
+(22:17) so  here  what  i  do  is  i  generate  an
+
+(22:19) output  number  of  tests
+
+(22:21) and  for  each  test  i  output
+
+(22:24) um  i  output  the  test  case
+
+(22:27) and  i  then  read  in  the  program's  output
+
+(22:30) and  if  the  output  is  wrong
+
+(22:31) then  i  say  okay  no  this  is  wrong  and
+
+(22:34) then  i
+
+(22:34) and  then  i  immediately  close  the
+
+(22:36) interactor  and  otherwise  i'll  put  okay
+
+(22:39) and  the  key  fit  property  that  the
+
+(22:40) interactor  needs  to  have  is
+
+(22:42) you  need  to  be  it  is  um
+
+(22:45) that  you  need  to  be  able  to  um  as  it
+
+(22:48) needs  to  print  okay
+
+(22:49) at  the  end  if  and  only  if  the
+
+(22:51) contestant's  output  is  correct
+
+(22:54) okay  so  now  i  can
+
+(22:58) use  interact.sh  pretty  similarly  to  the
+
+(23:01) other  programs  i  use  my  wrong  solution
+
+(23:03) my  interactor  and  then  the  number  of
+
+(23:04) tests
+
+(23:06) and  yeah  so  this  can  be  pretty  janky
+
+(23:08) especially  because
+
+(23:10) um  especially  because  a  lot  of  time  the
+
+(23:12) way  you'll  write  your  interactors  a
+
+(23:13) little  precise
+
+(23:14) so  like  for  example  um  or  sorry  it's  a
+
+(23:16) little  imprecise
+
+(23:19) um  so  here  we  end  up  getting  like  a  few
+
+(23:21) a  few  um
+
+(23:22) just  error  outputs  and  this  is  because
+
+(23:24) even  after  my  interactor  terminates  my
+
+(23:26) wrong  solution  keeps  trying  to  read
+
+(23:28) input
+
+(23:28) but  it'll  still  give  us  the  test  or  the
+
+(23:30) interaction  that  generates  the  wrong
+
+(23:32) output
+
+(23:32) and  so  here  like  the  interactor  says
+
+(23:34) there  are  going  to  be  three  tests  and
+
+(23:36) then  it  says  the  first  test  is  one  six
+
+(23:38) and  my  program  outputs  eight  instead  of
+
+(23:41) seven
+
+(23:42) um  but  then  if  we  have  a  correct
+
+(23:44) solution
+
+(23:47) like  so  this  is  pretty  simple  code
+
+(23:51) um  i  can  then  interact.stage  of  c  c
+
+(23:54) interactor  100  and
+
+(23:55) as  you  can  see  it's  going  to  take  quite
+
+(23:57) a  bit  longer  than  for  the  other  scripts
+
+(24:00) um  and  this  is  just  because  um  piping
+
+(24:03) the  two  code  or  the  two  programs  to  each
+
+(24:05) other  is  not  particularly  efficient
+
+(24:06) operation
+
+(24:08) but  um  a  couple  of  seconds  later  we  do
+
+(24:10) end  up  seeing  that  it  passes  all  100
+
+(24:12) tests
+
+(24:14) so  yeah  that  is  the  script
+
+(24:17) so  i  think  that  is  about  all  that  i  have
+
+(24:19) to  go  over  today
+
+(24:20) so  yeah  if  anyone  has  any  questions  feel
+
+(24:23) free  to  post  them  in  the  comments
+
+(24:24) again  i  may  not  be  able  to  answer  most
+
+(24:27) or  all  of  them
+
+(24:28) just  because  especially  if  they  have  to
+
+(24:30) do  with  configuring  wsl  or
+
+(24:32) wsl  or  linux  or  anything  like  that  just
+
+(24:34) because  i'm  not  an  expert
+
+(24:36) and  diagnosing  those  issues  can  be
+
+(24:38) really  difficult
+
+(24:39) but  yeah  i'm  certainly  happy  to  answer
+
+(24:41) questions  about  my  setup  or  how  i  use  it
+
+(24:43) i  do  think  stress  testing  i  do  think
+
+(24:45) like  in  general
+
+(24:46) i  don't  believe  the  specific  editor  that
+
+(24:48) you  use  or  your  general  setup  matters
+
+(24:50) that  much  for  competitive  programming
+
+(24:52) but  i  do  think  having  these  stress  test
+
+(24:53) scripts  has  helped  me  quite  a  bit
+
+(24:55) in  some  tricky  situations  just  because
+
+(24:58) um
+
+(24:58) a  lot  of  time  in  an  actual  contest  it
+
+(25:00) can  be  a  real  pain  to  figure  out  what
+
+(25:02) the  error  is  in  your  code
+
+(25:04) but  it  can  be  really  easy  to  write  a
+
+(25:06) quick  wrong  a  quick
+
+(25:07) sorry  a  quick  slow  solution  and  a  um
+
+(25:10) generator  and  at  that  point  you  can  get
+
+(25:12) a  test  to  debug  with
+
+(25:14) and  that  can  make  your  life  a  lot  easier
+
+(25:16) so  yeah  thanks  for  watching

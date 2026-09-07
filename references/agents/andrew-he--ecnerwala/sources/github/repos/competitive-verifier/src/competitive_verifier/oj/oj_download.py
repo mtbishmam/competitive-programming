@@ -1,0 +1,48 @@
+from contextlib import nullcontext
+from logging import getLogger
+
+from competitive_verifier import log
+from competitive_verifier.models import Problem
+
+from .problem import NotLoggedInError, problem_from_url
+
+logger = getLogger(__name__)
+
+
+def _run(*, problem: Problem) -> bool:
+    return bool(problem.download_system_cases())
+
+
+def main(url: str, *, group_log: bool = False) -> bool:
+    # prepare values
+    problem = problem_from_url(url)
+    if problem is None:
+        logger.error(
+            'The URL "%s" is not supported',
+            url,
+            extra={"github": log.GitHubMessageParams()},
+        )
+        return False
+
+    with (
+        log.group(f"download[Run]: {url}")
+        if group_log
+        else nullcontext(logger.info("download[Run]: %s", url))
+    ):
+        try:
+            _run(problem=problem)
+        except Exception as e:
+            if isinstance(e, NotLoggedInError):
+                logger.exception(
+                    "Login is required to download the problem. %r",
+                    url,
+                    extra={"github": log.GitHubMessageParams()},
+                )
+            else:
+                logger.exception(
+                    "Failed to download. %r",
+                    url,
+                    extra={"github": log.GitHubMessageParams()},
+                )
+            return False
+    return True

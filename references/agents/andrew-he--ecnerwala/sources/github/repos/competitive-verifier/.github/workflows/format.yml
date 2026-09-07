@@ -1,0 +1,39 @@
+name: format
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**.py"
+      - "tests/**.py"
+      - pyproject.toml
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up poetry
+        run: pipx install poetry
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+          cache: "poetry"
+
+      - name: Install dependencies
+        run: poetry install --with dev
+
+      - name: Run linter
+        run: poetry run poe lint
+
+      - name: Dump schema
+        run: poetry run poe schema:write
+
+      - name: Git diff
+        run: git diff --exit-code

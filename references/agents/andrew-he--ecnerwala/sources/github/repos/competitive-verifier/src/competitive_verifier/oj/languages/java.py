@@ -1,0 +1,50 @@
+import pathlib
+from collections.abc import Sequence
+from logging import getLogger
+from typing import Any, Literal
+
+from pydantic import Field, ValidationInfo, field_validator
+
+from .base import LanguageEnvironment, OjVerifyUserDefinedConfig
+from .user_defined import UserDefinedLanguage
+
+logger = getLogger(__name__)
+
+
+class OjVerifyJavaConfig(OjVerifyUserDefinedConfig):
+    execute: None = None  # pyright: ignore[reportIncompatibleVariableOverride]
+
+    @field_validator("execute", "compile", mode="before")
+    @classmethod
+    def name_must_contain_space(cls, v: Any, info: ValidationInfo) -> None:  # noqa: ANN401
+        if v is None:
+            return
+        raise ValueError(f'You cannot overwrite "{info.field_name}" for Java language')
+
+
+class JavaLanguageEnvironment(LanguageEnvironment):
+    @property
+    def name(self) -> str:
+        return "Java"
+
+    def get_compile_command(
+        self, path: pathlib.Path, *, basedir: pathlib.Path, tempdir: pathlib.Path
+    ) -> list[str]:
+        return ["javac", str(basedir / path)]
+
+    def get_execute_command(
+        self, path: pathlib.Path, *, basedir: pathlib.Path, tempdir: pathlib.Path
+    ) -> list[str]:
+        relative_path = (basedir / path).relative_to(basedir)
+        class_path = ".".join([*relative_path.parent.parts, relative_path.stem])
+        return ["java", class_path]
+
+
+class JavaLanguage(UserDefinedLanguage):
+    extension: Literal["java"] = "java"  # pyright: ignore[reportIncompatibleVariableOverride]
+    config: OjVerifyJavaConfig = Field(default_factory=OjVerifyJavaConfig)  # pyright: ignore[reportIncompatibleVariableOverride]
+
+    def list_environments(
+        self, path: pathlib.Path, *, basedir: pathlib.Path
+    ) -> Sequence[LanguageEnvironment]:
+        return [JavaLanguageEnvironment()]
