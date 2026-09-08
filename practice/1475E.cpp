@@ -23,33 +23,53 @@ using vb = V<bool>; using vvi = V<vi>;
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define rand(l, r) uniform_int_distribution<ll>(l, r)(rng)
 
+const int N = 1000 + 1;
+vi fact(N), ifact(N);
 const int MOD = 1e9 + 7;
 void solve(int cs) {
     int n, k; cin >> n >> k;
     vi a(n);
     rep(i,0,n) cin >> a[i];
 
-    vi b = a; sort(all(b));
-    reverse(all(b));
-    int mx = 0; for (int i = 0; i < k; i++) mx += b[i];
+    sort(all(a));
+    reverse(all(a));
+    int mx = 0; rep(i,0,k) mx += a[i];
 
-    vvi dp(n, vi(k+1, -1));
-    auto f = [&](this auto f, int i, int j, int cur) -> int {
-        if (i == n) return 0;
-        if (cur == 0) return 1;
-        auto& ret = dp[i][j];
-        if (~ret) return ret;
-        ret = f(i+1, j, cur);
-        if (j && cur-a[i]>=0) ret = (ret + f(i+1, j-1, cur-a[i])) % MOD;
-        return ret;
+    map<int, int> mp; rep(i,0,n) mp[a[i]]++;
+    int lst = a[k-1];
+    int other = 0;
+    vi b = a; sort(all(b)); b.erase(unique(all(b)), b.end()); reverse(all(b));
+    for (auto& key : b)
+        if (key==lst) break;
+        else other += mp[key];
+    int rem = k - other;
+    auto ncr = [&](int n, int r) -> int {
+        dbg(n, r);
+        dbg(fact[n], ifact[n-r], fact[r]);
+        return (fact[n] * ifact[n - r] % MOD * ifact[r]) % MOD;
     };
-    int ans = 0;
-    for (int i = 0; i < n; i++) ans = (ans + f(i, k, mx)) % MOD;
+    int ans = ncr(mp[lst], rem);
     cout << ans << endl;
-    // cout << f(0, k, mx) << endl;
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);
+
+    fact[0] = fact[1] = 1;
+    for (int i = 2; i < N; i++) fact[i] = fact[i - 1] * i % MOD;
+
+    auto pw = [&](int a, int b) {
+        int ret = 1;
+        while (b) {
+            if (b & 1) ret = ret * a % MOD;
+            a = a * a % MOD;
+            b >>= 1;
+        }
+        return ret;
+    };
+
+    ifact[N - 1] = pw(fact[N - 1], MOD - 2);
+    for (int i = N - 2; i >= 0; i--) ifact[i] = ifact[i + 1] * (i + 1) % MOD;
+
     int tc = 1;
     // #ifdef DeBuG
     cin >> tc;

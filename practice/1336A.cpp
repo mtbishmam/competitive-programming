@@ -30,16 +30,16 @@ void solve(int cs) {
         int x, y; cin >> x >> y; x--, y--;
         g[x].push_back(y); g[y].push_back(x);
     }
-    vi con;
+    vi con(n), sub(n), dep(n);
     auto f = [&](this auto f, int u, int l, int p) -> void {
-        int ret = 0, cnt = 0;
+        sub[u] = 1;
+        dep[u] = l;
         for (auto& v : g[u]) {
             if (v == p) continue;
             f(v, l+1, u);
-            cnt++;
+            sub[u] += sub[v];
         }
-        ret = l - cnt;
-        con.push_back(ret);
+        con[u] = sub[u] * dep[u] - (sub[u] - 1) * (dep[u] + 1);
     };
     f(0, 0, 0);
     int ans = 0;

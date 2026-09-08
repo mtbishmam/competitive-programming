@@ -26,6 +26,15 @@ mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 void solve(int cs) {
     int n; cin >> n;
     string s; cin >> s;
+    vi a(n); rep(i, 0, n) a[i] = s[i] - '0', a[i] -= 1;
+    map<int, int> mp; mp[0] = 1;
+    int p = 0, ans = 0;
+    rep(i, 0, n) {
+        p += a[i];
+        ans += mp[p];
+        mp[p]++;
+    }
+    cout << ans << endl;
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);
