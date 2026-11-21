@@ -1,57 +1,65 @@
-#include "bits/stdc++.h"
+#include <bits/stdc++.h>
 using namespace std;
-// #include <ext/pb_ds/assoc_container.hpp>
-// #include <ext/pb_ds/tree_policy.hpp>
-// using namespace __gnu_pbds;
-#ifndef DeBuG
-#define dbg(...)
-#define TT template <typename T
-#endif
-#define TU TT, typename U>
 
-#define int int64_t
-#define endl '\n'
-#define sz(x) (int) (x).size()
-#define all(x) begin(x), end(x)
-#define rep(i,a,b) for(int i=a; i<(b); ++i)
-TU bool chmin(T&a,U b){return a>b?(a=b,1):0;}
-TU bool chmax(T&a,U b){return a<b?(a=b,1):0;}
-TT> using V = vector<T>; using vi = V<int>;
-using ll = long long; using pii=pair<int,int>;
-using vb = V<bool>; using vvi = V<vi>;
-// TT> using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
-#define rand(l, r) uniform_int_distribution<ll>(l, r)(rng)
+using ll = long long;
 
-void solve(int cs) {
-    int n, k; cin >> n >> k;
-    V<vi> g(n);
-    rep(i,0,n-1) {
-        int x, y; cin >> x >> y; x--, y--;
-        g[x].push_back(y); g[y].push_back(x);
+int n, k;
+vector<vector<int>> g, h;
+vector<int> par, level;
+vector<bool> tourist;
+ll ans;
+
+void dfs1(int u) {
+    for (int v : g[u]) {
+        if (v == par[u]) continue;
+        par[v] = u;
+        level[v] = 1 + level[u];
+        dfs1(v);
     }
-    vi con(n), sub(n), dep(n);
-    auto f = [&](this auto f, int u, int l, int p) -> void {
-        sub[u] = 1;
-        dep[u] = l;
-        for (auto& v : g[u]) {
-            if (v == p) continue;
-            f(v, l+1, u);
-            sub[u] += sub[v];
-        }
-        con[u] = sub[u] * dep[u] - (sub[u] - 1) * (dep[u] + 1);
-    };
-    f(0, 0, 0);
-    int ans = 0;
-    sort(all(con)); reverse(all(con));
-    for (int i = 0; i < k; i++) ans += con[i];
-    cout << ans << endl;
 }
-signed main() {
-    cin.tie(0)->sync_with_stdio(0);
-    int tc = 1;
-    #ifdef DeBuG
-    cin >> tc;
-    #endif
-    for (int cs = 1; cs <= tc; cs++) solve(cs);
+
+void assignIndustries() {
+    h = g;
+    priority_queue<pair<int, int>> pq;
+    for (int i = 1; i < n; i++) {
+        if (h[i].size() == 1) pq.push(make_pair(level[i], i));
+    }
+    vector<int> ss(n, 0);
+    while (k) {
+        auto [d, u] = pq.top();
+        pq.pop();
+        tourist[u] = 0;
+        int p = par[u];
+        ss[p] += 1 + ss[u];
+        h[p].pop_back();
+        if (p and h[p].size() == 1) pq.push(make_pair(level[p] - ss[p], p));
+        k--;
+    }
 }
+
+void dfs2(int u, ll c) {
+    if (not tourist[u]) ans += c;
+    for (int v : g[u]) {
+        if (v != par[u]) dfs2(v, c + tourist[u]);
+    }
+}
+
+int main() {
+    cin >> n >> k;
+    g.resize(n);
+    for (int _ = 0; _ < n - 1; _++) {
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+        g[u].emplace_back(v);
+        g[v].emplace_back(u);
+    }
+    par.resize(n, -1), level.resize(n, 0);
+    dfs1(0);
+    tourist.resize(n, 1);
+    assignIndustries();
+    dfs2(0, 0);
+    cout << ans << '\n';
+    return 0;
+}
+

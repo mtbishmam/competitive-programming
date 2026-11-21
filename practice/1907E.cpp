@@ -1,50 +1,51 @@
 #include "bits/stdc++.h"
 using namespace std;
-// #include <ext/pb_ds/assoc_container.hpp>
-// #include <ext/pb_ds/tree_policy.hpp>
-// using namespace __gnu_pbds;
+
 #ifndef DeBuG
 #define dbg(...)
 #define TT template <typename T
 #endif
-#define TU TT, typename U>
 
 #define int int64_t
 #define endl '\n'
 #define sz(x) (int) (x).size()
 #define all(x) begin(x), end(x)
 #define rep(i,a,b) for(int i=a; i<(b); ++i)
-TU bool chmin(T&a,U b){return a>b?(a=b,1):0;}
-TU bool chmax(T&a,U b){return a<b?(a=b,1):0;}
 TT> using V = vector<T>; using vi = V<int>;
 using ll = long long; using pii=pair<int,int>;
-using vb = V<bool>; using vvi = V<vi>;
-// TT> using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define rand(l, r) uniform_int_distribution<ll>(l, r)(rng)
 
-int dsum(int x) {
-    int ret = 0;
-    while (x) ret += x % 10, x /= 10;
-    return ret;
-}
+const int N = 1e7 + 10;
+int ans[N];
 void solve(int cs) {
     int n; cin >> n;
-    int ans = 1; int nn = n;
-    while (nn) {
-        int lst = nn % 10; int cur = 0;
-        for (int a = 0; a <= lst; a++)
-            for (int b = 0; b <= lst; b++)
-                for (int c = 0; c <= lst; c++)
-                    if ((a + b + c) == lst) cur++;
-        nn /= 10;
-        ans *= cur;
-    }
-    cout << ans << endl;
+    cout << ans[n] << endl;
 }
 signed main() {
     cin.tie(0)->sync_with_stdio(0);
-    
+
+    vi d(10);
+    rep(a, 0, 10) rep(b, 0, 10) rep(c, 0, 10) if (a + b + c <= 9) d[a + b + c]++;
+    ans[0] = d[0];
+    rep(i, 1, N) {
+        int x = i, cur = 1;
+        while (x) cur *= d[x % 10], x /= 10;
+        ans[i] = cur; 
+    }
+
+    auto dsum = [](int x) {
+        int s = 0;
+        while (x) s += x % 10, x /= 10;
+        return s;
+    };
+//    rep(a, 0, 100)
+//        rep(b, 0, 100)
+//            rep(c, 0, 100)
+//                if (dsum(a) + dsum(b) + dsum(c) == dsum(a + b + c))
+//                    cout << a + b + c << " = " << a << " " << b << " " << c << endl;              
+
     int tc = 1;
     // #ifdef DeBuG
     cin >> tc;
