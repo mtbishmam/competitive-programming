@@ -18,14 +18,15 @@ void solve(int cs) {
     int n, m; cin >> n >> m;
     V<V<int>> g(n);
     rep(i, 0, m) { int x, y; cin >> x >> y; g[--x].push_back(--y); }
-    bool cyc = 0; int id = 1; V<int> vis(n);
+    bool cyc = 0; V<int> vis(n);
     auto dfs = [&](this auto&& f, int u) -> void {
-        vis[u] = id;
+        vis[u] = 1;
         for (auto& v : g[u]) {
             if (!vis[v]) f(v);
-            else if (vis[v] == id) cyc = 1;
+            else if (vis[v] == 1) cyc = 1;
         }
-    }; rep(i, 0, n) if (!vis[i]) dfs(i), id++;
+        vis[u] = 2;
+    }; rep(i, 0, n) if (!vis[i]) dfs(i);
     cout << (cyc ? "YES" : "NO") << endl;
 }
 signed main() {
